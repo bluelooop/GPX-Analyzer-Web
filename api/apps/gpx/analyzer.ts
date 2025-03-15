@@ -1,7 +1,6 @@
 import { PythonShell } from 'python-shell';
-import { parseUrl } from './utils';
 import { GPXRoute } from './models';
-import { convertToCamelCase } from '../utils';
+import { convertToCamelCase, parseUrl } from '../utils';
 
 const ROUTE_PROVIDER_VARIABLE_KEYS: Record<string, string> = {
   'strava.com': 'STRAVA_ACCESS_KEY',
