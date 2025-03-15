@@ -19,7 +19,7 @@ interface ElevationProvider {
 
 interface AnaliseRouteOptions {
   segmentCount: number;
-  providerToken?: string;
+  routeProviderToken?: string;
   elevationProvider?: ElevationProvider;
 }
 
@@ -37,7 +37,7 @@ interface AnaliseRouteOptions {
  *   - Otherwise, this value is ignored for route provider lookup.
  * @param options - A partial object of `AnaliseRouteOptions` that may include:
  *   - `segmentCount`: The count of segment to split the analysis.
- *   - `providerToken`: The token for specific route providers.
+ *   - `routeProviderToken`: The token for specific route providers.
  *   - `elevationProvider`: An object defining the elevation provider and its required token.
  *
  * @returns A record of environment variables required for specific route or elevation services.
@@ -47,7 +47,7 @@ interface AnaliseRouteOptions {
  * ```typescript
  * const variables = getEnvironmentVariables(
  *   'https://www.strava.com',
- *   { providerToken: 'myStravaToken', elevationProvider: { name: 'google', token: 'myGoogleToken' } }
+ *   { routeProviderToken: 'myStravaToken', elevationProvider: { name: 'google', token: 'myGoogleToken' } }
  * );
  * console.log(variables);
  * // Output: {STRAVA_ACCESS_KEY: 'myStravaToken', GOOGLE_ELEVATION_API_KEY: 'myGoogleToken' }
@@ -65,7 +65,7 @@ const getEnvironmentVariables = (
     const routeProviderVariableKey = ROUTE_PROVIDER_VARIABLE_KEYS[routeURL.host];
 
     if (routeProviderVariableKey) {
-      environmentVariables[routeProviderVariableKey] = options.providerToken ?? '';
+      environmentVariables[routeProviderVariableKey] = options.routeProviderToken ?? '';
     }
   }
 
@@ -96,7 +96,7 @@ const getEnvironmentVariables = (
  * @param segmentCount
  * @param options - An object of type `AnaliseRouteOptions` that specifies:
  *   - `segmentCount`: The number of segments to divide the route into (default: 1).
- *   - `providerToken`: The API token of the route provider.
+ *   - `routeProviderToken`: The API token of the route provider.
  *     Example: Access token for Strava.
  *   - `elevationProvider`: Object specifying the elevation provider, structured as:
  *     - `name`: The name of the elevation provider (e.g., "google").
@@ -112,7 +112,7 @@ const getEnvironmentVariables = (
  * ```typescript
  * const routes = await analyseRoute('https://strava.com/route/1234', {
  *   segmentCount: 5,
- *   providerToken: 'stravaAccessToken',
+ *   routeProviderToken: 'stravaAccessToken',
  *   elevationProvider: { name: 'google', token: 'googleElevationToken' },
  * });
  * console.log(routes);
@@ -132,13 +132,17 @@ export const analyseRoute = (
   };
 
   // @ts-ignore
-  return PythonShell.run(process.env.GPX_ANALYZER_SCRIPT_PATH, pythonCallOptions).then(
-    (results) => {
+  return PythonShell.run(process.env.GPX_ANALYZER_SCRIPT_PATH, pythonCallOptions)
+    .then((results) => {
       const firstDataIndex = results.findIndex((result) => result === '[');
       const lastDataIndex = results.findIndex((result) => result === ']');
       const data = results.slice(firstDataIndex, lastDataIndex + 1).join('');
 
       return convertToCamelCase<GPXRoute[]>(JSON.parse(data));
-    },
-  );
+    })
+    .catch((_) => {
+      return Promise.reject(
+        new Error("Couldn't analyze route. Please check your input and try again."),
+      );
+    });
 };

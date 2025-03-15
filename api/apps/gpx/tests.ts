@@ -13,11 +13,11 @@ describe('GPX Analyzer', () => {
 
   test('Analise route using Strava URL', async () => {
     const url = 'https://www.strava.com/routes/123';
-    const providerToken = process.env.STRAVA_ACCESS_TOKEN;
+    const routeProviderToken = process.env.STRAVA_ACCESS_TOKEN;
     const segmentCount = 5;
 
     try {
-      const routes = await analyseRoute(url, { segmentCount, providerToken });
+      const routes = await analyseRoute(url, { segmentCount, routeProviderToken });
 
       expect(routes).toBeInstanceOf(Array<GPXRoute>);
 
