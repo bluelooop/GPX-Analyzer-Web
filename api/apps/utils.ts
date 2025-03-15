@@ -1,3 +1,5 @@
+import { IncomingHttpHeaders } from 'http';
+
 const toCamelCase = (str: string): string =>
   str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
 
@@ -84,4 +86,34 @@ export const parseUrl = (urlString: string): URL | null => {
   } catch (error) {
     return null;
   }
+};
+
+/**
+ * Extracts the token from the `Authorization` header in an HTTP request.
+ *
+ * This function assumes the `Authorization` header is in the format: `Bearer <token>`.
+ * If the header is present, it returns the token portion. If the header is missing or
+ * doesn't follow the expected format, it returns `undefined`.
+ *
+ * @param headers - The HTTP request headers, typically from `IncomingHttpHeaders`.
+ * @returns {string | undefined} - The extracted token if present, otherwise `undefined`.
+ *
+ * @example
+ * ```typescript
+ * const headers: IncomingHttpHeaders = {
+ *   authorization: 'Bearer my-secret-token',
+ * };
+ * const token = getAuthorizationToken(headers); // Returns: 'my-secret-token'
+ *
+ * const invalidHeaders: IncomingHttpHeaders = {};
+ * const noToken = getAuthorizationToken(invalidHeaders); // Returns: undefined
+ * ```
+ */
+export const getAuthorizationToken = (headers: IncomingHttpHeaders) => {
+  const { authorization } = headers;
+
+  if (authorization) {
+    return authorization.split(' ')[1];
+  }
+  return undefined;
 };
