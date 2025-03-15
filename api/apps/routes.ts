@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import gpxRouter from './apps/gpx/views';
+import gpxRouter from './gpx/views';
 
 export const apiRouter = Router();
 
