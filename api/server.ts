@@ -1,5 +1,8 @@
 import express from 'express';
 import { apiRouter } from './apps/routes';
+import { loadConfigurations } from './configurations';
+
+loadConfigurations();
 
 const server: express.Application = express();
 
