@@ -22,15 +22,19 @@ const prodConfigurations: Configuration[] = [
 ];
 
 export const loadConfigurations = () => {
-  Array.from({ ...configurations, ...testConfigurations, ...prodConfigurations }).forEach(
+  console.log('Loading configurations...');
+  Array.from([...configurations, ...testConfigurations, ...prodConfigurations]).forEach(
     ({ filename, override }) => {
+      console.log(`Loading configuration file: ${filename}`);
       dotenv.config({ path: path.resolve(process.cwd(), filename), override });
     },
   );
 };
 
 export const loadConfigurationsForTests = (testPath: string) => {
+  console.log('Loading configurations...');
   testConfigurations.forEach(({ filename, override }) => {
+    console.log(`Loading configuration file: ${filename}`);
     dotenv.config({ path: path.resolve(testPath, filename), override });
   });
 };

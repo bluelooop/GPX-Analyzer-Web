@@ -67,8 +67,6 @@ create-env-file:
 	@echo "GPX_ANALYZER_SCRIPT_PATH=$(GPX_ANALYZER_LIB_PATH)/gpx_analyzer.py" >> $(ENV_FILE)
 
 	@echo "# STRAVA Values" >> $(ENV_FILE)
-	@echo "STRAVA_CLIENT_ID=$(STRAVA_CLIENT_ID)" >> $(ENV_FILE)
-	@echo "STRAVA_CLIENT_SECRET=$(STRAVA_CLIENT_SECRET)" >> $(ENV_FILE)
-	@echo "STRAVA_REDIRECT_URI=$(STRAVA_REDIRECT_DOMAIN)/api/auth/route-provider/strava/access-token" >> $(ENV_FILE)
+	@echo "STRAVA_REDIRECT_PATH=api/auth/route-provider/strava/access-token" >> $(ENV_FILE)
 
 	@echo "Production ENV file created"
