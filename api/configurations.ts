@@ -1,17 +1,31 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-export const loadConfigurations = () => {
-  dotenv.config();
-  dotenv.config({ path: path.resolve(process.cwd(), '.env.local'), override: true });
+interface Configuration {
+  filename: string;
+  override: boolean;
+}
 
-  dotenv.config({ path: path.resolve(process.cwd(), '.env.test'), override: true });
-  dotenv.config({ path: path.resolve(process.cwd(), '.env.test.local'), override: true });
+const configurations: Configuration[] = [
+  { filename: '.env', override: false },
+  { filename: '.env.local', override: true },
+];
+
+const testConfigurations: Configuration[] = [
+  { filename: '.env.test', override: true },
+  { filename: '.env.test.local', override: true },
+];
+
+export const loadConfigurations = () => {
+  Array.from({ ...configurations, ...testConfigurations }).forEach(({ filename, override }) => {
+    dotenv.config({ path: path.resolve(process.cwd(), filename), override });
+  });
 };
 
 export const loadConfigurationsForTests = (testPath: string) => {
-  dotenv.config({ path: path.resolve(testPath, '.env.test'), override: true });
-  dotenv.config({ path: path.resolve(testPath, '.env.test.local'), override: true });
+  testConfigurations.forEach(({ filename, override }) => {
+    dotenv.config({ path: path.resolve(testPath, filename), override });
+  });
 };
 
 declare global {
