@@ -13,7 +13,7 @@ gpxRouter.post('/analyze', tokenMiddleware, (req, res) => {
   const segmentCount = parseInt(segments as string, 10);
   const routeProviderToken = getAuthorizationToken(req.headers);
 
-  analyseRoute(url, { segmentCount, routeProviderToken })
+  analyseRoute(url, { segmentCount, routeProvider: routeProviderToken })
     .then((result: GPXRoute[]) => res.json(result))
     .catch((err: any) => res.status(400).json({ message: err.message }));
 });

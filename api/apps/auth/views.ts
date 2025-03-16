@@ -1,19 +1,12 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { parseUrl } from '../utils';
 import { RouteProvider, RouteProviderAccessToken } from './models';
 import { getConsentUrl, getProviderAccessToken } from './providers';
+import { ROUTE_PROVIDERS } from '../providers/constants';
 
 const authRouter = Router();
 
-const ROUTE_PROVIDERS: Record<string, string> = {
-  'strava.com': 'strava',
-  'www.strava.com': 'strava',
-
-  'garmin.com': 'garmin',
-  'www.garmin.com': 'garmin',
-};
-
-authRouter.post('/route-provider', (req, res) => {
+authRouter.post('/route-provider', (req: Request, res: Response) => {
   const { url } = req.body;
 
   const routeURL = parseUrl(url);
@@ -31,17 +24,20 @@ authRouter.post('/route-provider', (req, res) => {
   }
 });
 
-authRouter.get('/route-provider/:provider/access-token', (req, res): any => {
-  const { provider } = req.params;
-  const { code } = req.query;
+authRouter.get(
+  '/route-provider/:provider/access-token',
+  (req: Request, res: Response): Response | any => {
+    const { provider } = req.params;
+    const { code } = req.query;
 
-  if (!code) {
-    return res.status(400).json({ message: 'Authorization code is missing' });
-  }
+    if (!code) {
+      return res.status(400).json({ message: 'Authorization code is missing' });
+    }
 
-  getProviderAccessToken(provider, code as string)
-    .then((token: RouteProviderAccessToken) => res.json(token))
-    .catch((err: Error | any) => res.status(400).json({ message: err.message }));
-});
+    getProviderAccessToken(provider, code as string)
+      .then((token: RouteProviderAccessToken) => res.json(token))
+      .catch((err: Error | any) => res.status(400).json({ message: err.message }));
+  },
+);
 
 export default authRouter;

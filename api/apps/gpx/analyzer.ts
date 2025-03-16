@@ -1,25 +1,20 @@
 import { PythonShell } from 'python-shell';
 import { GPXRoute } from './models';
 import { convertToCamelCase, parseUrl } from '../utils';
-
-const ROUTE_PROVIDER_VARIABLE_KEYS: Record<string, string> = {
-  'strava.com': 'STRAVA_ACCESS_KEY',
-  'www.strava.com': 'STRAVA_ACCESS_KEY',
-};
-
-const ELEVATION_PROVIDER_VARIABLE_KEYS: Record<string, string> = {
-  google: 'GOOGLE_ELEVATION_API_KEY',
-};
-
-interface ElevationProvider {
-  name: string;
-  token: string;
-}
+import {
+  ELEVATION_PROVIDER_VARIABLE_KEYS,
+  ROUTE_PROVIDER_VARIABLE_KEYS,
+} from '../providers/constants';
 
 interface AnaliseRouteOptions {
   segmentCount: number;
-  routeProviderToken?: string;
-  elevationProvider?: ElevationProvider;
+  routeProvider?: {
+    token: string;
+  };
+  elevationProvider?: {
+    name: string;
+    token: string;
+  };
 }
 
 /**
@@ -64,16 +59,16 @@ const getEnvironmentVariables = (
     const routeProviderVariableKey = ROUTE_PROVIDER_VARIABLE_KEYS[routeURL.host];
 
     if (routeProviderVariableKey) {
-      environmentVariables[routeProviderVariableKey] = options.routeProviderToken ?? '';
+      environmentVariables[routeProviderVariableKey] = options.routeProvider?.token ?? '';
     }
   }
 
   if (options.elevationProvider) {
     const elevationProviderVariableKey =
-      ELEVATION_PROVIDER_VARIABLE_KEYS[options.elevationProvider.name];
+      ELEVATION_PROVIDER_VARIABLE_KEYS[options.elevationProvider?.name];
 
     if (elevationProviderVariableKey) {
-      environmentVariables[elevationProviderVariableKey] = options.elevationProvider.token ?? '';
+      environmentVariables[elevationProviderVariableKey] = options.elevationProvider?.token ?? '';
     }
   }
 
@@ -117,7 +112,7 @@ const getEnvironmentVariables = (
  * console.log(routes);
  * ```
  */
-export const analyseRoute = (
+export const analyseRoute = async (
   urlOrFile: string,
   { segmentCount = 1, ...options }: AnaliseRouteOptions,
 ): Promise<GPXRoute[]> => {
@@ -130,18 +125,18 @@ export const analyseRoute = (
     env: environmentVariables,
   };
 
-  // @ts-ignore
-  return PythonShell.run(process.env.GPX_ANALYZER_SCRIPT_PATH, pythonCallOptions)
-    .then((results) => {
-      const firstDataIndex = results.findIndex((result) => result === '[');
-      const lastDataIndex = results.findIndex((result) => result === ']');
-      const data = results.slice(firstDataIndex, lastDataIndex + 1).join('');
+  try {
+    // @ts-ignore
+    const results = await PythonShell.run(process.env.GPX_ANALYZER_SCRIPT_PATH, pythonCallOptions);
 
-      return convertToCamelCase<GPXRoute[]>(JSON.parse(data));
-    })
-    .catch((_) => {
-      return Promise.reject(
-        new Error("Couldn't analyze route. Please check your input and try again."),
-      );
-    });
+    const firstDataIndex = results.findIndex((result) => result === '[');
+    const lastDataIndex = results.findIndex((result_1) => result_1 === ']');
+    const data = results.slice(firstDataIndex, lastDataIndex + 1).join('');
+
+    return convertToCamelCase<GPXRoute[]>(JSON.parse(data));
+  } catch (err: Error | any) {
+    throw new Error(
+      `Couldn't analyze route. Please check your input and try again : ${err.message}`,
+    );
+  }
 };
