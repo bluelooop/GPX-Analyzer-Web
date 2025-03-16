@@ -34,7 +34,7 @@ create-gpx-analyzer-python-venv:
 	fi
 	@pyenv local $(GPX_ANALYZER_LIB_PYTHON_VERSION)
 	@$(PYTHON_HOST) -m venv $(GPX_ANALYZER_LIB_PATH)/.venv
-
+	@rm -f .python-version
 	@echo "Python 3.11.0 virtual environment created"
 
 
