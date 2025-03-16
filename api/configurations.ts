@@ -41,6 +41,9 @@ declare global {
     interface ProcessEnv {
       PYTHON_PATH: string;
       GPX_ANALYZER_SCRIPT_PATH: string;
+      STRAVA_CLIENT_ID: string;
+      STRAVA_CLIENT_SECRET: string;
+      STRAVA_REDIRECT_DOMAIN: string;
       // Add other env variables here
       NODE_ENV: 'development' | 'production';
     }

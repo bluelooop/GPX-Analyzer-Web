@@ -24,10 +24,6 @@ clone-gpx-analyzer:
 create-gpx-analyzer-python-venv:
 	# Read the GPX Analyzer python version
 	@echo "GPX Analyzer Python version: $(GPX_ANALYZER_LIB_PYTHON_VERSION)"
-	@if ! command -v pyenv >/dev/null 2>&1; then \
-		echo "Installing pyenv..."; \
-		curl https://pyenv.run | bash; \
-	fi
 	@if ! pyenv versions | grep -q $(GPX_ANALYZER_LIB_PYTHON_VERSION); then \
 		echo "Installing Python $(GPX_ANALYZER_LIB_PYTHON_VERSION)"; \
 		pyenv install $(GPX_ANALYZER_LIB_PYTHON_VERSION); \
