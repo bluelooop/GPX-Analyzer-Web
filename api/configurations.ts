@@ -16,10 +16,17 @@ const testConfigurations: Configuration[] = [
   { filename: '.env.test.local', override: true },
 ];
 
+const prodConfigurations: Configuration[] = [
+  { filename: '.env.production', override: true },
+  { filename: '.env.production.local', override: true },
+];
+
 export const loadConfigurations = () => {
-  Array.from({ ...configurations, ...testConfigurations }).forEach(({ filename, override }) => {
-    dotenv.config({ path: path.resolve(process.cwd(), filename), override });
-  });
+  Array.from({ ...configurations, ...testConfigurations, ...prodConfigurations }).forEach(
+    ({ filename, override }) => {
+      dotenv.config({ path: path.resolve(process.cwd(), filename), override });
+    },
+  );
 };
 
 export const loadConfigurationsForTests = (testPath: string) => {
