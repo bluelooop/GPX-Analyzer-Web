@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export const tokenMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const routeProviderTokenMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization) {

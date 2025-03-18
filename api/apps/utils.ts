@@ -109,11 +109,40 @@ export const parseUrl = (urlString: string): URL | null => {
  * const noToken = getAuthorizationToken(invalidHeaders); // Returns: undefined
  * ```
  */
-export const getAuthorizationToken = (headers: IncomingHttpHeaders) => {
+export const getAuthorizationToken = (headers: IncomingHttpHeaders): string | undefined => {
   const { authorization } = headers;
 
   if (authorization) {
     return authorization.split(' ')[1];
   }
   return undefined;
+};
+
+/**
+ * Extracts a required token from the `Authorization` header of an HTTP request.
+ *
+ * This function assumes the `Authorization` header is in the format: `Bearer <token>`.
+ * If the header is missing or doesn't follow the expected format, it throws an error.
+ *
+ * @param headers - The HTTP request headers, typically from `IncomingHttpHeaders`.
+ * @returns {string} - The extracted token from the header.
+ * @throws {Error} - If no token is present in the `Authorization` header.
+ *
+ * @example
+ * ```typescript
+ * const headers: IncomingHttpHeaders = {
+ *   authorization: 'Bearer my-secret-token',
+ * };
+ * const token = getRequiredAuthorizationToken(headers); // Returns: 'my-secret-token'
+ *
+ * const invalidHeaders: IncomingHttpHeaders = {};
+ * getRequiredAuthorizationToken(invalidHeaders); // Throws an Error: 'Authorization token is missing'
+ * ```
+ */
+export const getRequiredAuthorizationToken = (headers: IncomingHttpHeaders): string => {
+  const token = getAuthorizationToken(headers);
+  if (!token) {
+    throw new Error('Authorization token is missing');
+  }
+  return token;
 };
