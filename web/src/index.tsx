@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Homepage from './Homepage.tsx';
+import Homepage from './pages/Homepage/Homepage.tsx';
 
 
 const appRoot = document.getElementById('app')!;
