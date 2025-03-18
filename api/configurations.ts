@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 
 interface Configuration {
   filename: string;
@@ -23,20 +24,22 @@ const prodConfigurations: Configuration[] = [
 
 export const loadConfigurations = () => {
   console.log('Loading configurations...');
-  Array.from([...configurations, ...testConfigurations, ...prodConfigurations]).forEach(
-    ({ filename, override }) => {
+  Array.from([...configurations, ...testConfigurations, ...prodConfigurations])
+    .filter(({ filename }) => fs.existsSync(path.resolve(process.cwd(), filename)))
+    .forEach(({ filename, override }) => {
       console.log(`Loading configuration file: ${filename}`);
       dotenv.config({ path: path.resolve(process.cwd(), filename), override });
-    },
-  );
+    });
 };
 
 export const loadConfigurationsForTests = (testPath: string) => {
   console.log('Loading configurations...');
-  testConfigurations.forEach(({ filename, override }) => {
-    console.log(`Loading configuration file: ${filename}`);
-    dotenv.config({ path: path.resolve(testPath, filename), override });
-  });
+  testConfigurations
+    .filter(({ filename }) => fs.existsSync(path.resolve(testPath, filename)))
+    .forEach(({ filename, override }) => {
+      console.log(`Loading configuration file: ${filename}`);
+      dotenv.config({ path: path.resolve(testPath, filename), override });
+    });
 };
 
 declare global {
