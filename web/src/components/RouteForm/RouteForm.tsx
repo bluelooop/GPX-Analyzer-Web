@@ -18,19 +18,19 @@ const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onA
   const [feedbackMessages, setFeedbackMessages] = useState<string[]>([]);
 
   const formValidated = useCallback((): [boolean, string[]] => {
-    let validForm = true;
+    let formValid = true;
     let feedbackMessage = [];
 
     setRouteURLError(false);
     setSplitByError(false);
 
     if (!routeURL) {
-      validForm = false;
+      formValid = false;
       setRouteURLError(true);
       feedbackMessage.push('Route URL is required');
     } else {
       if (!isValidRouteURL(routeURL)) {
-        validForm = false;
+        formValid = false;
         setRouteURLError(true);
         feedbackMessage.push('Route URL is not valid');
       }
@@ -38,25 +38,25 @@ const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onA
     }
 
     if (!splitBy) {
-      validForm = false;
+      formValid = false;
       setSplitByError(true);
       feedbackMessage.push('Split by is required');
     } else {
       const splitByNumber = parseInt(splitBy);
       if (isNaN(splitByNumber)) {
-        validForm = false;
+        formValid = false;
         setSplitByError(true);
         feedbackMessage.push('Split by must be a number');
       }
 
       if (splitByNumber <= 0) {
-        validForm = false;
+        formValid = false;
         setSplitByError(true);
         feedbackMessage.push('Split by must be greater than 0');
       }
     }
 
-    return [validForm, feedbackMessage];
+    return [formValid, feedbackMessage];
   }, [routeURL, splitBy]);
 
   const handleAnalyzeRouteClick = useCallback(() => {
@@ -76,6 +76,25 @@ const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onA
     }
   }, [routeURL, splitBy]);
 
+    return [formValid, feedbackMessage];
+  }, [routeURL, splitBy]);
+
+  const handleAnalyzeRouteClick = useCallback(() => {
+    const [validated, feedbackMessages] = formValidated();
+
+    if (!validated) {
+      setFeedbackMessages(feedbackMessages);
+    }
+
+    if (validated) {
+      onAnalyzeRouteClick(routeURL as string, parseInt(splitBy)).then(success => {
+        if (success) {
+          setRouteURL('');
+          setSplitBy('');
+        }
+      });
+    }
+  }, [routeURL, splitBy]);
   return (
     <Form className="route-form" loading={analyzing}>
       <Grid stackable>
