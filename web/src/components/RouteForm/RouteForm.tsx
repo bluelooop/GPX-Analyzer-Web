@@ -1,14 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Form, FormButton, FormField, FormInput, Grid, Input, Message } from 'semantic-ui-react';
 import { isValidRouteURL } from '../../utils.ts';
 
 interface RouteFormProps {
   analyzing: boolean;
   verifyingRouteURL: boolean;
+  onVerifyRouteURL: (routeURL: string) => Promise<boolean>;
   onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean>;
 }
 
-const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onAnalyzeRouteClick }) => {
+const RouteForm: React.FC<RouteFormProps> = ({
+                                               analyzing,
+                                               verifyingRouteURL,
+                                               onVerifyRouteURL,
+                                               onAnalyzeRouteClick,
+                                             }) => {
   const [routeURL, setRouteURL] = useState<string>('');
   const [splitBy, setSplitBy] = useState<string>('');
 
@@ -59,6 +65,13 @@ const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onA
     return [formValid, feedbackMessage];
   }, [routeURL, splitBy]);
 
+  const handleOnRouteURLChange = useCallback((e: ChangeEvent) => {
+    const inputElement = (e.target as HTMLInputElement);
+
+    setRouteURL(inputElement.value);
+    onVerifyRouteURL(inputElement.value);
+  }, []);
+
   const handleAnalyzeRouteClick = useCallback(() => {
     const [validated, feedbackMessages] = formValidated();
 
@@ -106,7 +119,7 @@ const RouteForm: React.FC<RouteFormProps> = ({ analyzing, verifyingRouteURL, onA
               label="URL"
               loading={verifyingRouteURL}
               value={routeURL}
-              onChange={(_, { value }) => setRouteURL(value)}
+              onChange={handleOnRouteURLChange}
               error={routeURLError}
             />
           </Grid.Column>

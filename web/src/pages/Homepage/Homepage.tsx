@@ -14,6 +14,11 @@ function Homepage() {
     return Promise.resolve(true);
   }, []);
 
+  const onVerifyRouteURL = useCallback((routeURL: string) => {
+    setVerifyingRouteURL(true);
+    return Promise.resolve(true);
+  }, []);
+
 
   return (
     <div className="homepage">
@@ -25,7 +30,9 @@ function Homepage() {
           <p>
             Welcome to GPX Analyzer!
           </p>
-          <RouteForm analyzing={analyzing} verifyingRouteURL={verifyingRouteURL}
+          <RouteForm analyzing={analyzing}
+                     verifyingRouteURL={verifyingRouteURL}
+                     onVerifyRouteURL={onVerifyRouteURL}
                      onAnalyzeRouteClick={onAnalyzeRouteClick} />
           {/*<RoutePanel />*/}
         </main>
