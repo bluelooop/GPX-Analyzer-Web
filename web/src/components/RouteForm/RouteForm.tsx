@@ -1,16 +1,16 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Form, FormButton, FormField, FormInput, Grid, Input, Message } from 'semantic-ui-react';
 import { isValidRouteURL } from '../../utils.ts';
 
 interface RouteFormProps {
-
+  splitBy?: number;
   onVerifyRouteURL: (routeURL: string) => Promise<boolean>;
   onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean>;
 }
 
-const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteClick }) => {
+const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnalyzeRouteClick }) => {
   const [routeURL, setRouteURL] = useState<string>('');
-  const [splitBy, setSplitBy] = useState<string>('');
+  const [splitByValue, setSplitByValue] = useState<string>(splitBy ? splitBy.toString() : '');
 
   const [routeURLError, setRouteURLError] = useState<boolean>(false);
   const [splitByError, setSplitByError] = useState<boolean>(false);
@@ -40,12 +40,12 @@ const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteC
 
     }
 
-    if (!splitBy) {
+    if (!splitByValue) {
       formValid = false;
       setSplitByError(true);
       feedbackMessage.push('Split by is required');
     } else {
-      const splitByNumber = parseInt(splitBy);
+      const splitByNumber = parseInt(splitByValue);
       if (isNaN(splitByNumber)) {
         formValid = false;
         setSplitByError(true);
@@ -60,7 +60,7 @@ const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteC
     }
 
     return [formValid, feedbackMessage];
-  }, [routeURL, splitBy]);
+  }, [routeURL, splitByValue]);
 
   const handleOnRouteURLChange = useCallback((e: ChangeEvent) => {
     const inputElement = (e.target as HTMLInputElement);
@@ -69,6 +69,7 @@ const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteC
     setRouteURL(value);
 
     if (value.length > 0) {
+      setRouteURLError(false);
       setVerifyingRouteURL(true);
 
       onVerifyRouteURL(value).then(verified => {
@@ -88,16 +89,18 @@ const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteC
 
     if (validated) {
       setAnalyzing(true);
-      onAnalyzeRouteClick(routeURL as string, parseInt(splitBy)).then(success => {
-        if (success) {
-          setRouteURL('');
-          setSplitBy('');
+      onAnalyzeRouteClick(routeURL as string, parseInt(splitByValue)).then(analyzed => {
+        if (analyzed) {
           setAnalyzing(false);
           setFeedbackMessages([]);
         }
       });
     }
-  }, [routeURL, splitBy]);
+  }, [routeURL, splitByValue]);
+
+  useEffect(() => {
+    setSplitByValue(splitBy ? splitBy.toString() : '');
+  }, [splitBy]);
 
   return (
     <Form className="route-form" loading={analyzing}>
@@ -121,8 +124,8 @@ const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteC
                 id="split-by"
                 label={{ content: 'km' }}
                 labelPosition="right"
-                value={splitBy}
-                onChange={(_, { value }) => setSplitBy(value)}
+                value={splitByValue}
+                onChange={(_, { value }) => setSplitByValue(value)}
                 placeholder="5"
               />
             </FormField>
