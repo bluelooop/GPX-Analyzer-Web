@@ -51,6 +51,8 @@ declare global {
       STRAVA_CLIENT_ID: string;
       STRAVA_CLIENT_SECRET: string;
       STRAVA_REDIRECT_DOMAIN: string;
+      FRONTEND_URL: string;
+      FRONTEND_CONSENT_REDIRECT_PAGE: string;
       // Add other env variables here
       NODE_ENV: 'development' | 'production';
     }
