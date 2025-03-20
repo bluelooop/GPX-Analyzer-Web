@@ -1,4 +1,4 @@
 export interface RouteProvider {
   name: string;
-  consentUrl: string;
+  consentUrl?: string;
 }

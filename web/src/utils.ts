@@ -4,9 +4,7 @@
  * - `http://www.strava.com/routes/<ID>`
  * - `https://www.strava.com/routes/<ID>`
  */
-const routeURLS = [
-  /http(s)?:\/\/www.strava.com\/routes\/[0-9]/g,
-];
+const routeURLS = [/http(s)?:\/\/www.strava.com\/routes\/[0-9]/g];
 
 /**
  * Validates whether a given URL string is a valid Strava route URL.

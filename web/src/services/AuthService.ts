@@ -17,19 +17,21 @@ const AuthService = {
         body: JSON.stringify({ url: routeURL }),
       });
 
+      if (!response.ok) {
+        return { name: '' };
+      }
+
       const data = await response.json();
 
       return {
         name: data.name,
-        consentUrl: data.consentUrl,
+        consentUrl: data?.consentUrl,
       };
-
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 };
-
 
 export default AuthService;

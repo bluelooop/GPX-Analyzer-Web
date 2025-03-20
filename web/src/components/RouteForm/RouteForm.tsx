@@ -4,11 +4,15 @@ import { isValidRouteURL } from '../../utils.ts';
 
 interface RouteFormProps {
   splitBy?: number;
-  onVerifyRouteURL: (routeURL: string) => Promise<boolean>;
-  onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean>;
+  onVerifyRouteURL: (routeURL: string) => Promise<boolean | void>;
+  onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean | void>;
 }
 
-const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnalyzeRouteClick }) => {
+const RouteForm: React.FC<RouteFormProps> = ({
+  splitBy,
+  onVerifyRouteURL,
+  onAnalyzeRouteClick,
+}) => {
   const [routeURL, setRouteURL] = useState<string>('');
   const [splitByValue, setSplitByValue] = useState<string>(splitBy ? splitBy.toString() : '');
 
@@ -22,7 +26,7 @@ const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnal
 
   const validatingForm = useCallback((): [boolean, string[]] => {
     let formValid = true;
-    let feedbackMessage = [];
+    const feedbackMessage = [];
 
     setRouteURLError(false);
     setSplitByError(false);
@@ -37,7 +41,6 @@ const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnal
         setRouteURLError(true);
         feedbackMessage.push('Route URL is not valid');
       }
-
     }
 
     if (!splitByValue) {
@@ -62,25 +65,26 @@ const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnal
     return [formValid, feedbackMessage];
   }, [routeURL, splitByValue]);
 
-  const handleOnRouteURLChange = useCallback((e: ChangeEvent) => {
-    const inputElement = (e.target as HTMLInputElement);
-    const value = inputElement.value;
+  const handleOnRouteURLChange = useCallback(
+    async (e: ChangeEvent) => {
+      const inputElement = e.target as HTMLInputElement;
+      const value = inputElement.value;
 
-    setRouteURL(value);
+      setRouteURL(value);
 
-    if (value.length > 0) {
-      setRouteURLError(false);
-      setVerifyingRouteURL(true);
+      if (value.length > 0) {
+        setRouteURLError(false);
+        setVerifyingRouteURL(true);
 
-      onVerifyRouteURL(value).then(verified => {
-        if (verified) {
-          setVerifyingRouteURL(false);
-        }
-      });
-    }
-  }, []);
+        await onVerifyRouteURL(value);
 
-  const handleAnalyzeRouteClick = useCallback(() => {
+        setVerifyingRouteURL(false);
+      }
+    },
+    [onVerifyRouteURL],
+  );
+
+  const handleAnalyzeRouteClick = useCallback(async () => {
     const [validated, feedbackMessages] = validatingForm();
 
     if (!validated) {
@@ -89,14 +93,13 @@ const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnal
 
     if (validated) {
       setAnalyzing(true);
-      onAnalyzeRouteClick(routeURL as string, parseInt(splitByValue)).then(analyzed => {
-        if (analyzed) {
-          setAnalyzing(false);
-          setFeedbackMessages([]);
-        }
-      });
+
+      await onAnalyzeRouteClick(routeURL as string, parseInt(splitByValue));
+
+      setAnalyzing(false);
+      setFeedbackMessages([]);
     }
-  }, [routeURL, splitByValue]);
+  }, [onAnalyzeRouteClick, routeURL, splitByValue, validatingForm]);
 
   useEffect(() => {
     setSplitByValue(splitBy ? splitBy.toString() : '');
@@ -133,15 +136,18 @@ const RouteForm: React.FC<RouteFormProps> = ({ splitBy, onVerifyRouteURL, onAnal
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <FormButton className="ui primary button" onClick={handleAnalyzeRouteClick}>Analyze</FormButton>
+            <FormButton className="ui primary button" onClick={handleAnalyzeRouteClick}>
+              Analyze
+            </FormButton>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Message visible={splitByError || routeURLError}
-                     error
-                     header="Oops... something went wrong"
-                     list={feedbackMessages}
+            <Message
+              visible={splitByError || routeURLError}
+              error
+              header="Oops... something went wrong"
+              list={feedbackMessages}
             />
           </Grid.Column>
         </Grid.Row>
