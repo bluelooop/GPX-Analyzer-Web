@@ -65,7 +65,7 @@ create-env-file:
 
 	@echo "PYTHON_PATH=$(GPX_ANALYZER_LIB_PATH)/.venv/bin/python" >> $(ENV_FILE)
 	@echo "GPX_ANALYZER_SCRIPT_PATH=$(GPX_ANALYZER_LIB_PATH)/gpx_analyzer.py" >> $(ENV_FILE)
-
+	@echo "FRONTEND_CONSENT_REDIRECT_PAGE=consent-page" >> $(ENV_FILE)
 	@echo "# STRAVA Values" >> $(ENV_FILE)
 	@echo "STRAVA_REDIRECT_PATH=api/auth/route-provider/strava/access-token" >> $(ENV_FILE)
 

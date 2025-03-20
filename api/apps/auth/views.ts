@@ -26,17 +26,34 @@ authRouter.post('/route-provider', (req: Request, res: Response) => {
 
 authRouter.get(
   '/route-provider/:provider/access-token',
-  (req: Request, res: Response): Response | any => {
+  async (req: Request, res: Response): Promise<Response | any> => {
     const { provider } = req.params;
     const { code } = req.query;
+    const redirectURI = `${process.env.FRONTEND_URL}/${process.env.FRONTEND_CONSENT_REDIRECT_PAGE}`;
 
     if (!code) {
-      return res.status(400).json({ message: 'Authorization code is missing' });
+      return res.redirect(`${redirectURI}/?auth=false`);
     }
 
-    getProviderAccessToken(provider, code as string)
-      .then((token: RouteProviderAccessToken) => res.json(token))
-      .catch((err: Error | any) => res.status(400).json({ message: err.message }));
+    try {
+      const accessToken: RouteProviderAccessToken = await getProviderAccessToken(
+        provider,
+        code as string,
+      );
+
+      if (!accessToken.success) {
+        return res.redirect(`${redirectURI}/?auth=false`);
+      }
+
+      res.cookie('_rpat', accessToken.tokens.accessToken, {
+        httpOnly: true,
+        expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
+      });
+
+      return res.redirect(`${redirectURI}/?auth=${accessToken.tokens.expiresIn}`);
+    } catch {
+      return res.redirect(`${redirectURI}/?auth=false`);
+    }
   },
 );
 
