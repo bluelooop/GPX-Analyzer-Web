@@ -3,18 +3,12 @@ import { Form, FormButton, FormField, FormInput, Grid, Input, Message } from 'se
 import { isValidRouteURL } from '../../utils.ts';
 
 interface RouteFormProps {
-  analyzing: boolean;
-  verifyingRouteURL: boolean;
+
   onVerifyRouteURL: (routeURL: string) => Promise<boolean>;
   onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean>;
 }
 
-const RouteForm: React.FC<RouteFormProps> = ({
-                                               analyzing,
-                                               verifyingRouteURL,
-                                               onVerifyRouteURL,
-                                               onAnalyzeRouteClick,
-                                             }) => {
+const RouteForm: React.FC<RouteFormProps> = ({ onVerifyRouteURL, onAnalyzeRouteClick }) => {
     const [routeURL, setRouteURL] = useState<string>('');
     const [splitBy, setSplitBy] = useState<string>('');
 
@@ -23,7 +17,10 @@ const RouteForm: React.FC<RouteFormProps> = ({
 
     const [feedbackMessages, setFeedbackMessages] = useState<string[]>([]);
 
-    const formValidated = useCallback((): [boolean, string[]] => {
+  const [analyzing, setAnalyzing] = useState<boolean>(false);
+  const [verifyingRouteURL, setVerifyingRouteURL] = useState<boolean>(false);
+
+  const validatingForm = useCallback((): [boolean, string[]] => {
       let formValid = true;
       let feedbackMessage = [];
 
@@ -67,23 +64,36 @@ const RouteForm: React.FC<RouteFormProps> = ({
 
     const handleOnRouteURLChange = useCallback((e: ChangeEvent) => {
       const inputElement = (e.target as HTMLInputElement);
+      const value = inputElement.value;
 
-      setRouteURL(inputElement.value);
-      onVerifyRouteURL(inputElement.value);
+      setRouteURL(value);
+
+      if (value.length > 0) {
+        setVerifyingRouteURL(true);
+
+        onVerifyRouteURL(value).then(verified => {
+          if (verified) {
+            setVerifyingRouteURL(false);
+          }
+        });
+      }
     }, []);
 
     const handleAnalyzeRouteClick = useCallback(() => {
-      const [validated, feedbackMessages] = formValidated();
+      const [validated, feedbackMessages] = validatingForm();
 
       if (!validated) {
         setFeedbackMessages(feedbackMessages);
       }
 
       if (validated) {
+        setAnalyzing(true);
         onAnalyzeRouteClick(routeURL as string, parseInt(splitBy)).then(success => {
           if (success) {
             setRouteURL('');
             setSplitBy('');
+            setAnalyzing(false);
+            setFeedbackMessages([]);
           }
         });
       }
@@ -127,7 +137,7 @@ const RouteForm: React.FC<RouteFormProps> = ({
             <Grid.Column>
               <Message visible={splitByError || routeURLError}
                        error
-                       header="Upps... Something went wrong"
+                       header="Oops... something went wrong"
                        list={feedbackMessages}
               />
             </Grid.Column>
