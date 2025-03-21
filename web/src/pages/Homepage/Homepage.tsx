@@ -1,21 +1,24 @@
+import React, { useCallback, useState } from 'react';
 import RouteForm from '../../components/RouteForm/RouteForm.tsx';
-import { Container, Header } from 'semantic-ui-react';
-import { useCallback, useState } from 'react';
+import { Container, Grid, Header, Message, MessageHeader } from 'semantic-ui-react';
 import AuthService from '../../services/AuthService.ts';
 import { GPXRoute, RouteProvider } from '../../models.ts';
 import { getCookie } from '../../utils.ts';
 import GpxService from '../../services/GpxService.ts';
+import RoutePanel from '../../components/RoutePanel/RoutePanel.tsx';
 
-function Homepage() {
+const Homepage: React.FC = () => {
   const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
-  const [route, setRoute] = useState<GPXRoute>({} as GPXRoute);
+  const [route, setRoute] = useState<GPXRoute>();
+  const [analyzeFeedbackMessage, setAnalyzeFeedbackMessage] = useState<string>();
 
   const analyzeRoute = async (routeURL: URL, splitBy: number) => {
+    setAnalyzeFeedbackMessage('');
     try {
       const routeData = await GpxService.analyze(routeURL, splitBy);
       setRoute(routeData);
-    } catch {
-      // Error Omitted
+    } catch (error: Error | any) {
+      setAnalyzeFeedbackMessage(error.message);
     }
   };
 
@@ -64,17 +67,39 @@ function Homepage() {
           <Header as="h1">GPX Analyzer</Header>
         </header>
         <main>
-          <p>Welcome to GPX Analyzer!</p>
-          <RouteForm
-            onVerifyRouteURL={onVerifyRouteURL}
-            onAnalyzeRouteClick={onAnalyzeRouteClick}
-            splitBy={10}
-          />
-          {/*<RoutePanel />*/}
+          <Grid stackable>
+            <Grid.Row>
+              <Grid.Column>
+                <p>Welcome to GPX Analyzer!</p>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <RouteForm
+                  onVerifyRouteURL={onVerifyRouteURL}
+                  onAnalyzeRouteClick={onAnalyzeRouteClick}
+                  splitBy={10}
+                />
+              </Grid.Column>
+            </Grid.Row>
+            {analyzeFeedbackMessage && (
+              <Grid.Row>
+                <Grid.Column>
+                  <Message error>
+                    <MessageHeader>Oops... something went wrong</MessageHeader>
+                    <p>{analyzeFeedbackMessage}</p>
+                  </Message>
+                </Grid.Column>
+              </Grid.Row>
+            )}
+            <Grid.Row>
+              <Grid.Column>{route && <RoutePanel route={route} />}</Grid.Column>
+            </Grid.Row>
+          </Grid>
         </main>
       </Container>
     </div>
   );
-}
+};
 
 export default Homepage;
