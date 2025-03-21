@@ -1,30 +1,29 @@
 import React from 'react';
 import { GPXRoute } from '../../models.ts';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 import './RoutePanel.scss';
 import SegmentsPanel from './SegmentsPanel.tsx';
 
 interface RoutePanelProps {
   route: GPXRoute;
+  routeURL: string;
 }
 
-const RoutePanel: React.FC<RoutePanelProps> = ({ route }) => {
+const RoutePanel: React.FC<RoutePanelProps> = ({ route, routeURL }) => {
   return (
     <div className="route-panel">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column>
-            <h1>{route.name}</h1>
+            <Header as="h1">
+              <a href={routeURL} target="_blank" rel="noreferrer">
+                {route.name}
+              </a>
+              <Header.Subheader>{route.description}</Header.Subheader>
+            </Header>
           </Grid.Column>
         </Grid.Row>
-        {route.description && (
-          <Grid.Row>
-            <Grid.Column>
-              <h1>{route.description}</h1>
-            </Grid.Column>
-          </Grid.Row>
-        )}
         <Grid.Row>
           <Grid.Column>
             <div className="route-stats">

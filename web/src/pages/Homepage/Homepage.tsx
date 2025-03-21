@@ -12,6 +12,7 @@ import './Homepage.scss';
 const Homepage: React.FC = () => {
   const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
   const [route, setRoute] = useState<GPXRoute | null>();
+  const [routeURL, setRouteURL] = useState<string>();
   const [analyzeFeedbackMessage, setAnalyzeFeedbackMessage] = useState<string>();
 
   const analyzeRoute = async (routeURL: URL, splitBy: number) => {
@@ -20,6 +21,7 @@ const Homepage: React.FC = () => {
     try {
       const routeData = await GpxService.analyze(routeURL, splitBy);
       setRoute(routeData);
+      setRouteURL(routeURL.toString());
     } catch (error: Error | any) {
       setAnalyzeFeedbackMessage(error.message);
     }
@@ -66,41 +68,39 @@ const Homepage: React.FC = () => {
   return (
     <div className="homepage">
       <Container>
-        <header>
-          <Header as="h1">GPX Analyzer</Header>
-        </header>
-        <main>
-          <Grid stackable>
+        <Header as="h1">
+          GPX Analyzer
+          <Header.Subheader>
+            Analyze any public or private strava route, splitting by kms
+          </Header.Subheader>
+        </Header>
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column>
+              <RouteForm
+                onVerifyRouteURL={onVerifyRouteURL}
+                onAnalyzeRouteClick={onAnalyzeRouteClick}
+              />
+            </Grid.Column>
+          </Grid.Row>
+          {analyzeFeedbackMessage && (
             <Grid.Row>
               <Grid.Column>
-                <p>Analyze any public or private strava route, splitting by kms</p>
+                <Message error>
+                  <MessageHeader>Oops... something went wrong</MessageHeader>
+                  <p>{analyzeFeedbackMessage}</p>
+                </Message>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
-                <RouteForm
-                  onVerifyRouteURL={onVerifyRouteURL}
-                  onAnalyzeRouteClick={onAnalyzeRouteClick}
-                />
-              </Grid.Column>
-            </Grid.Row>
-            {analyzeFeedbackMessage && (
-              <Grid.Row>
-                <Grid.Column>
-                  <Message error>
-                    <MessageHeader>Oops... something went wrong</MessageHeader>
-                    <p>{analyzeFeedbackMessage}</p>
-                  </Message>
-                </Grid.Column>
-              </Grid.Row>
-            )}
-            <Grid.Row>
-              <Grid.Column>
-                {route && !analyzeFeedbackMessage && <RoutePanel route={route} />}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </main>
+          )}
+          <Grid.Row>
+            <Grid.Column>
+              {route && routeURL && !analyzeFeedbackMessage && (
+                <RoutePanel route={route} routeURL={routeURL} />
+              )}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     </div>
   );
