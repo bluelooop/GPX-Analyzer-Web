@@ -10,7 +10,7 @@ export const CONSENT_URLS: Record<string, CallableFunction> = {
       throw new Error('Strava client ID or redirect URI not set');
     }
 
-    return `https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=code&scope=activity:read`;
+    return `https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=code&scope=read_all`;
   },
 };
 
