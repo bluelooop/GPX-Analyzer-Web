@@ -4,6 +4,8 @@ import { Grid, Header } from 'semantic-ui-react';
 
 import './RoutePanel.scss';
 import DesktopSegmentPanel from './DesktopSegmentPanel.tsx';
+import DesktopAIPanel from './DesktopAIPanel.tsx';
+import MobileSegmentPanel from './MobileSegmentPanel.tsx';
 
 interface RoutePanelProps {
   route: GPXRoute;
@@ -11,7 +13,7 @@ interface RoutePanelProps {
 
 const RoutePanel: React.FC<RoutePanelProps> = ({ route }) => {
   return (
-    <div className="route-panel">
+    <section className="route-panel">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column>
@@ -38,11 +40,27 @@ const RoutePanel: React.FC<RoutePanelProps> = ({ route }) => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <DesktopSegmentPanel segments={route.segments} />
+            <section className="desktop-segment-panel">
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column>
+                    <DesktopSegmentPanel segments={route.segments} />
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column>
+                    <DesktopAIPanel segments={route.segments} />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </section>
+            <section className="mobile-segment-panel">
+              <MobileSegmentPanel segments={route.segments} />
+            </section>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
+    </section>
   );
 };
 

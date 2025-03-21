@@ -38,7 +38,7 @@ const DesktopAIPanel: React.FC<DesktopAIPanelProps> = ({ segments }) => {
             <Grid.Column>
               <button
                 onClick={handleExplainWithAIClick}
-                className={`ui green button ${loading && 'disabled'}`}
+                className={`ui green button ${loading && 'disabled loading'}`}
                 disabled={loading}
               >
                 Explain with AI

@@ -1,7 +1,46 @@
+@mixin all-mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin all-desktop {
+  @media (min-width: 769px) {
+    @content;
+  }
+}
+
 .route-panel {
   .route-stats {
     display: flex;
     flex-direction: row;
     gap: 1rem;
   }
+
+  .mobile-segment-panel {
+    ul {
+      padding-left: 10px;
+
+      li {
+        list-style: none;
+      }
+    }
+  }
+
+  .desktop-segment-panel, .mobile-segment-panel {
+    display: none;
+  }
+
+  @include all-desktop {
+    .desktop-segment-panel {
+      display: block;
+    }
+  }
+
+  @include all-mobile {
+    .mobile-segment-panel {
+      display: block;
+    }
+  }
+
 }
