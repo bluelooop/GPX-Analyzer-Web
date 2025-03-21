@@ -9,11 +9,12 @@ import RoutePanel from '../../components/RoutePanel/RoutePanel.tsx';
 
 const Homepage: React.FC = () => {
   const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
-  const [route, setRoute] = useState<GPXRoute>();
+  const [route, setRoute] = useState<GPXRoute | null>();
   const [analyzeFeedbackMessage, setAnalyzeFeedbackMessage] = useState<string>();
 
   const analyzeRoute = async (routeURL: URL, splitBy: number) => {
     setAnalyzeFeedbackMessage('');
+    setRoute(null);
     try {
       const routeData = await GpxService.analyze(routeURL, splitBy);
       setRoute(routeData);
