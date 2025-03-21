@@ -7,6 +7,8 @@ import { getCookie } from '../../utils.ts';
 import GpxService from '../../services/GpxService.ts';
 import RoutePanel from '../../components/RoutePanel/RoutePanel.tsx';
 
+import './Homepage.scss';
+
 const Homepage: React.FC = () => {
   const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
   const [route, setRoute] = useState<GPXRoute | null>();
@@ -71,7 +73,7 @@ const Homepage: React.FC = () => {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column>
-                <p>Welcome to GPX Analyzer!</p>
+                <p>Analyze any public or private strava route, splitting by kms</p>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
