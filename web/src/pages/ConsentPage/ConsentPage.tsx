@@ -1,26 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { RouteProvider } from '../../models.ts';
+import React, { useEffect, useState } from 'react';
 import { useQueryParams } from '../../hooks.ts';
 import { setCookie } from '../../utils.ts';
 
 const ConsentPage: React.FC = () => {
   const searchParams = useQueryParams();
   const [consentError, setConsentError] = useState<string>('');
-
-  const getRouteProvider = useCallback((): RouteProvider | null => {
-    const routeProvider = sessionStorage.getItem('routeProvider');
-    sessionStorage.removeItem('routeProvider');
-
-    return routeProvider ? JSON.parse(routeProvider) : null;
-  }, []);
-
-  useEffect(() => {
-    const routeProvider = getRouteProvider();
-
-    if (routeProvider && routeProvider.consentUrl) {
-      window.location.href = routeProvider.consentUrl;
-    }
-  }, [getRouteProvider]);
 
   useEffect(() => {
     const authenticatedUntil = searchParams['auth'];
