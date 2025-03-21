@@ -1,8 +1,10 @@
 import { getAPIUrl } from './utils.ts';
-import { GPXRoute } from '../models.ts';
+import { AiGpxSegmentDescription, GPXRoute, GPXSegment } from '../models.ts';
 
 const ROUTES = {
   analyze: 'gpx/analyze',
+  aiExplanationSegment: 'gpx/ai-explanation/segment',
+  aiExplanationSegments: 'gpx/ai-explanation/segments',
 };
 
 const GpxService = {
@@ -25,6 +27,52 @@ const GpxService = {
       }
 
       return data[0] as GPXRoute;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  aiExplainSegment: async (gpxSegment: GPXSegment): Promise<AiGpxSegmentDescription> => {
+    const url = getAPIUrl(ROUTES.aiExplanationSegment);
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ segment: gpxSegment }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return Promise.reject(new Error(data.message));
+      }
+
+      return data as AiGpxSegmentDescription;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  aiExplainSegments: async (gpxSegments: GPXSegment[]): Promise<AiGpxSegmentDescription[]> => {
+    const url = getAPIUrl(ROUTES.aiExplanationSegments);
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ segments: gpxSegments }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return Promise.reject(new Error(data.message));
+      }
+
+      return data as AiGpxSegmentDescription[];
     } catch (error) {
       console.error(error);
       throw error;
