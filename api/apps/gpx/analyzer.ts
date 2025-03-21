@@ -134,9 +134,7 @@ export const analyseRoute = async (
     const data = results.slice(firstDataIndex, lastDataIndex + 1).join('');
 
     return convertToCamelCase<GPXRoute[]>(JSON.parse(data));
-  } catch (err: Error | any) {
-    throw new Error(
-      `Couldn't analyze route. Please check your input and try again : ${err.message}`,
-    );
+  } catch {
+    throw new Error("Couldn't analyze route. Please check your input and try again");
   }
 };

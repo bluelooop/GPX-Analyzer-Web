@@ -1,5 +1,5 @@
 import express from 'express';
-import { apiRouter } from './apps/routes';
+import apiRouter from './apps/routes';
 import { loadConfigurations } from './configurations';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
