@@ -20,7 +20,7 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
       <TableHeader>
         <TableRow>
           <TableHeaderCell rowSpan={2} textAlign="center">
-            <b>Number</b>
+            <b>Split</b>
           </TableHeaderCell>
           <TableHeaderCell colSpan={4} textAlign="center">
             <b>Elevations</b>
@@ -75,10 +75,8 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
       <TableBody>
         {segments.map((segment) => (
           <TableRow key={segment.number}>
-            <TableCell>
-              <Header as="h3" textAlign="center">
-                {segment.number}
-              </Header>
+            <TableCell textAlign="center">
+              <Header as="h3">{segment.number}</Header>
             </TableCell>
             <TableCell>{segment.startElevation.toFixed(2)} m</TableCell>
             <TableCell>{segment.endElevation.toFixed(2)} m</TableCell>
