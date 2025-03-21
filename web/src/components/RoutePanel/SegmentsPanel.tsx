@@ -89,9 +89,9 @@ const SegmentsPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
             <TableCell>{segment.endDistance.toFixed(2)} m</TableCell>
             <TableCell>{segment.elevationGain.toFixed(2)} m</TableCell>
             <TableCell>{segment.elevationLoss.toFixed(2)} m</TableCell>
-            <TableCell>{segment.minGrade.toFixed(2)} m</TableCell>
-            <TableCell>{segment.avgGrade.toFixed(2)} m</TableCell>
-            <TableCell>{segment.maxGrade.toFixed(2)} m</TableCell>
+            <TableCell>{segment.minGrade.toFixed(2)} %</TableCell>
+            <TableCell>{segment.avgGrade.toFixed(2)} %</TableCell>
+            <TableCell>{segment.maxGrade.toFixed(2)} %</TableCell>
           </TableRow>
         ))}
       </TableBody>
