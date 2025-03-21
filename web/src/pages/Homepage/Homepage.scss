@@ -1,3 +1,20 @@
 .homepage {
-  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+
+  min-height: 100vh;
+
+  .content {
+    flex: 1 0 auto;
+    padding-bottom: 2rem;
+  }
+
+  .footer {
+    margin-top: auto !important;
+    padding: 2em 0 !important;
+    width: 100%;
+
+    border-top: 1px solid #eee !important;
+  }
 }

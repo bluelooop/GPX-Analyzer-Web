@@ -1,30 +1,28 @@
 import React, { useCallback, useState } from 'react';
 import RouteForm from '../../components/RouteForm/RouteForm.tsx';
-import { Container, Grid, Header, Message, MessageHeader } from 'semantic-ui-react';
+import { Container, Grid, Header, Segment } from 'semantic-ui-react';
 import AuthService from '../../services/AuthService.ts';
 import { GPXRoute, RouteProvider } from '../../models.ts';
 import { getCookie } from '../../utils.ts';
 import GpxService from '../../services/GpxService.ts';
 import RoutePanel from '../../components/RoutePanel/RoutePanel.tsx';
 
+import FeedbackMessage from '../../components/FeedbackMessage/FeedbackMessage.tsx';
 import './Homepage.scss';
 
 const Homepage: React.FC = () => {
   const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
   const [route, setRoute] = useState<GPXRoute | null>();
-  const [routeURL, setRouteURL] = useState<string>();
   const [analyzeFeedbackMessage, setAnalyzeFeedbackMessage] = useState<string>();
 
   const analyzeRoute = async (routeURL: URL, splitBy: number) => {
     setAnalyzeFeedbackMessage('');
-    setRouteURL('');
     setRoute(null);
     try {
       const routeData = await GpxService.analyze(routeURL, splitBy);
       setRoute(routeData);
-      setRouteURL(routeURL.toString());
-    } catch (error: Error | any) {
-      setAnalyzeFeedbackMessage(error.message);
+    } catch (error: Error | unknown) {
+      setAnalyzeFeedbackMessage((error as Error).message);
     }
   };
 
@@ -68,41 +66,69 @@ const Homepage: React.FC = () => {
 
   return (
     <div className="homepage">
-      <Container>
-        <Header as="h1">
-          GPX Analyzer
-          <Header.Subheader>
-            Analyze any public or private strava route, splitting by kms
-          </Header.Subheader>
-        </Header>
-        <Grid stackable>
-          <Grid.Row>
-            <Grid.Column>
-              <RouteForm
-                onVerifyRouteURL={onVerifyRouteURL}
-                onAnalyzeRouteClick={onAnalyzeRouteClick}
-              />
-            </Grid.Column>
-          </Grid.Row>
-          {analyzeFeedbackMessage && (
+      <div className="content">
+        <Container>
+          <Header as="h1">
+            GPX Analyzer
+            <Header.Subheader>
+              Analyze any public or private strava route, splitting by kms
+            </Header.Subheader>
+          </Header>
+          <Grid stackable>
             <Grid.Row>
               <Grid.Column>
-                <Message error>
-                  <MessageHeader>Oops... something went wrong</MessageHeader>
-                  <p>{analyzeFeedbackMessage}</p>
-                </Message>
+                <RouteForm
+                  onVerifyRouteURL={onVerifyRouteURL}
+                  onAnalyzeRouteClick={onAnalyzeRouteClick}
+                />
               </Grid.Column>
             </Grid.Row>
-          )}
+            {analyzeFeedbackMessage && (
+              <Grid.Row>
+                <Grid.Column>
+                  <FeedbackMessage
+                    error
+                    title="Oops... something went wrong"
+                    message={analyzeFeedbackMessage}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            )}
+            <Grid.Row>
+              <Grid.Column>
+                {route && !analyzeFeedbackMessage && <RoutePanel route={route} />}
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
+      <Segment vertical className="footer">
+        <Grid container textAlign="center" verticalAlign="middle">
           <Grid.Row>
             <Grid.Column>
-              {route && routeURL && !analyzeFeedbackMessage && (
-                <RoutePanel route={route} routeURL={routeURL} />
-              )}
+              <p>
+                <a
+                  href="https://github.com/bluelooop/GPX-Analyzer-Web"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Github
+                </a>
+              </p>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <p>
+                With ❤️ by{' '}
+                <a href="https://blueloop.io" target="_blank" rel="noreferrer">
+                  Blue Loop
+                </a>
+              </p>
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Container>
+      </Segment>
     </div>
   );
 };

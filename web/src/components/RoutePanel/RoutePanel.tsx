@@ -7,19 +7,16 @@ import SegmentsPanel from './SegmentsPanel.tsx';
 
 interface RoutePanelProps {
   route: GPXRoute;
-  routeURL: string;
 }
 
-const RoutePanel: React.FC<RoutePanelProps> = ({ route, routeURL }) => {
+const RoutePanel: React.FC<RoutePanelProps> = ({ route }) => {
   return (
     <div className="route-panel">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column>
             <Header as="h1">
-              <a href={routeURL} target="_blank" rel="noreferrer">
-                {route.name}
-              </a>
+              {route.name}
               <Header.Subheader>{route.description}</Header.Subheader>
             </Header>
           </Grid.Column>
