@@ -78,7 +78,6 @@ const Homepage: React.FC = () => {
                 <RouteForm
                   onVerifyRouteURL={onVerifyRouteURL}
                   onAnalyzeRouteClick={onAnalyzeRouteClick}
-                  splitBy={10}
                 />
               </Grid.Column>
             </Grid.Row>
