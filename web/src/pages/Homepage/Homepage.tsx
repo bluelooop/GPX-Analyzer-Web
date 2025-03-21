@@ -118,7 +118,7 @@ const Homepage: React.FC = () => {
           <Grid.Row>
             <Grid.Column>
               <p>
-                With ❤️ by{' '}
+                Made with ❤️ by{' '}
                 <a href="https://blueloop.io" target="_blank" rel="noreferrer">
                   Blue Loop
                 </a>
