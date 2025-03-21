@@ -70,9 +70,7 @@ const Homepage: React.FC = () => {
         <Container>
           <Header as="h1">
             GPX Analyzer
-            <Header.Subheader>
-              Analyze any public or private strava route, splitting by kms
-            </Header.Subheader>
+            <Header.Subheader>Analyze any strava route, splitting by kms</Header.Subheader>
           </Header>
           <Grid stackable>
             <Grid.Row>
