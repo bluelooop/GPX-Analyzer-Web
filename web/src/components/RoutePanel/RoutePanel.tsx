@@ -3,7 +3,7 @@ import { GPXRoute } from '../../models.ts';
 import { Grid, Header } from 'semantic-ui-react';
 
 import './RoutePanel.scss';
-import SegmentsPanel from './SegmentsPanel.tsx';
+import DesktopSegmentPanel from './DesktopSegmentPanel.tsx';
 
 interface RoutePanelProps {
   route: GPXRoute;
@@ -38,7 +38,7 @@ const RoutePanel: React.FC<RoutePanelProps> = ({ route }) => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <SegmentsPanel segments={route.segments} />
+            <DesktopSegmentPanel segments={route.segments} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

@@ -14,7 +14,7 @@ interface SegmentsPanelProps {
   segments: GPXSegment[];
 }
 
-const SegmentsPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
+const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
   return (
     <Table celled striped structured color={'blue'}>
       <TableHeader>
@@ -99,4 +99,4 @@ const SegmentsPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
   );
 };
 
-export default SegmentsPanel;
+export default DesktopSegmentPanel;
