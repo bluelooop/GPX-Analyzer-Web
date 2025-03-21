@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { Form, FormButton, FormField, FormInput, Grid, Input, Message } from 'semantic-ui-react';
+import { Form, FormButton, FormField, FormInput, Grid, Input } from 'semantic-ui-react';
 import { isValidRouteURL } from '../../utils.ts';
+import FeedbackMessageList from '../FeedbackMessage/FeedbackMessageList.tsx';
 
 interface RouteFormProps {
   splitBy?: number;
@@ -143,11 +144,11 @@ const RouteForm: React.FC<RouteFormProps> = ({
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Message
-              visible={splitByError || routeURLError}
+            <FeedbackMessageList
               error
-              header="Oops... something went wrong"
-              list={feedbackMessages}
+              visible={splitByError || routeURLError}
+              title="Oops... something went wrong"
+              messages={feedbackMessages}
             />
           </Grid.Column>
         </Grid.Row>
