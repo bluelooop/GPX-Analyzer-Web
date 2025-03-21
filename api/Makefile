@@ -68,5 +68,7 @@ create-env-file:
 	@echo "FRONTEND_CONSENT_REDIRECT_PAGE=consent-page" >> $(ENV_FILE)
 	@echo "# STRAVA Values" >> $(ENV_FILE)
 	@echo "STRAVA_REDIRECT_PATH=api/auth/route-provider/strava/access-token" >> $(ENV_FILE)
+	@echo "# AI Value" >> $(ENV_FILE)
+	@echo "ANTHROPIC_MODEL=claude-3-5-haiku-20241022" >> $(ENV_FILE)
 
 	@echo "Production ENV file created"

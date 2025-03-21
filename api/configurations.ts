@@ -53,6 +53,7 @@ declare global {
       STRAVA_REDIRECT_DOMAIN: string;
       FRONTEND_URL: string;
       FRONTEND_CONSENT_REDIRECT_PAGE: string;
+      ANTHROPIC_MODEL: string;
       // Add other env variables here
       NODE_ENV: 'development' | 'production';
     }

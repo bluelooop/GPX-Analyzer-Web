@@ -22,3 +22,8 @@ export interface GPXRoute {
   elevationLoss: number;
   segments: GPXSegment[];
 }
+
+export interface AiGpxSegmentDescription {
+  segmentNumber: number;
+  description: string;
+}
