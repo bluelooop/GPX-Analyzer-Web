@@ -4,8 +4,8 @@ import { isValidRouteURL } from '../../utils.ts';
 
 interface RouteFormProps {
   splitBy?: number;
-  onVerifyRouteURL: (routeURL: string) => Promise<boolean | void>;
-  onAnalyzeRouteClick: (routeURL: string, splitBy: number) => Promise<boolean | void>;
+  onVerifyRouteURL: (routeURL: URL) => Promise<boolean | void>;
+  onAnalyzeRouteClick: (routeURL: URL, splitBy: number) => Promise<boolean | void>;
 }
 
 const RouteForm: React.FC<RouteFormProps> = ({
@@ -76,7 +76,7 @@ const RouteForm: React.FC<RouteFormProps> = ({
         setRouteURLError(false);
         setVerifyingRouteURL(true);
 
-        await onVerifyRouteURL(value);
+        await onVerifyRouteURL(new URL(value));
 
         setVerifyingRouteURL(false);
       }
@@ -94,7 +94,7 @@ const RouteForm: React.FC<RouteFormProps> = ({
     if (validated) {
       setAnalyzing(true);
 
-      await onAnalyzeRouteClick(routeURL as string, parseInt(splitByValue));
+      await onAnalyzeRouteClick(new URL(routeURL), parseInt(splitByValue));
 
       setAnalyzing(false);
       setFeedbackMessages([]);

@@ -6,7 +6,7 @@ const ROUTES = {
 };
 
 const AuthService = {
-  routeProvider: async (routeURL: string): Promise<RouteProvider> => {
+  routeProvider: async (routeURL: URL): Promise<RouteProvider> => {
     const url = getAPIUrl(ROUTES.routeProvider);
     try {
       const response = await fetch(url, {
@@ -14,7 +14,7 @@ const AuthService = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url: routeURL }),
+        body: JSON.stringify({ url: routeURL.toString() }),
       });
 
       if (!response.ok) {
