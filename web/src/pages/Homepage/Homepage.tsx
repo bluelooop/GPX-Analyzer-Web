@@ -17,6 +17,7 @@ const Homepage: React.FC = () => {
 
   const analyzeRoute = async (routeURL: URL, splitBy: number) => {
     setAnalyzeFeedbackMessage('');
+    setRouteURL('');
     setRoute(null);
     try {
       const routeData = await GpxService.analyze(routeURL, splitBy);
