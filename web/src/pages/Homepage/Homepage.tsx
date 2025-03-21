@@ -93,7 +93,9 @@ const Homepage: React.FC = () => {
               </Grid.Row>
             )}
             <Grid.Row>
-              <Grid.Column>{route && <RoutePanel route={route} />}</Grid.Column>
+              <Grid.Column>
+                {route && !analyzeFeedbackMessage && <RoutePanel route={route} />}
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </main>
