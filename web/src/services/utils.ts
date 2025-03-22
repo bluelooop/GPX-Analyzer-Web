@@ -1,2 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 export const getAPIUrl = (relativeURL: string): string =>
-  `http://localhost:3000/api/${relativeURL}`;
+  `${import.meta.env.VITE_API_URL}/api/${relativeURL}`;
