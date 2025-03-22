@@ -20,7 +20,7 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
       try {
         const currentSegmentData = { ...aiGpxSegmentDescriptions };
 
-        const aiData = await GpxService.aiExplainSegment(segment);
+        const aiData = await GpxService.aiExplain(segment);
 
         currentSegmentData[segment.number] = aiData.description;
         setAiGpxSegmentDescriptions(currentSegmentData);

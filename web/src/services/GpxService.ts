@@ -3,7 +3,7 @@ import { AiGpxSegmentDescription, GPXRoute, GPXSegment } from '../models.ts';
 
 const ROUTES = {
   analyze: 'gpx/analyze',
-  aiExplanationSegment: 'gpx/ai-explanation/segment',
+  aiExplanation: 'gpx/ai-explanation',
 };
 
 const GpxService = {
@@ -31,8 +31,8 @@ const GpxService = {
       throw error;
     }
   },
-  aiExplainSegment: async (gpxSegment: GPXSegment): Promise<AiGpxSegmentDescription> => {
-    const url = getAPIUrl(ROUTES.aiExplanationSegment);
+  aiExplain: async (gpxSegment: GPXSegment): Promise<AiGpxSegmentDescription> => {
+    const url = getAPIUrl(ROUTES.aiExplanation);
     try {
       const response = await fetch(url, {
         method: 'POST',
