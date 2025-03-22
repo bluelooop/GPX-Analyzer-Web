@@ -101,9 +101,9 @@ const Homepage: React.FC = () => {
         </Container>
       </div>
       <Segment vertical className="footer">
-        <Grid container textAlign="center" verticalAlign="middle">
-          <Grid.Row>
-            <Grid.Column>
+        <Grid container>
+          <Grid.Row columns={2}>
+            <Grid.Column floated="left">
               <p>
                 <a
                   href="https://github.com/bluelooop/GPX-Analyzer-Web"
@@ -114,9 +114,7 @@ const Homepage: React.FC = () => {
                 </a>
               </p>
             </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
+            <Grid.Column floated="right" textAlign="right">
               <p>
                 Made with ❤️ by{' '}
                 <a href="https://blueloop.io" target="_blank" rel="noreferrer">

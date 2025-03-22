@@ -47,9 +47,17 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                       <Header as="h4">
                         Split {segment.number}
                         <Header.Subheader>
-                          <span>D+: {segment.elevationGain.toFixed(2)} m</span>
-                          <span> -- </span>
-                          <span>D-: {segment.elevationLoss.toFixed(2)} m</span>
+                          <span>
+                            <b>D+: </b> {segment.elevationGain.toFixed(2)} m
+                          </span>
+                          <span> &bull; </span>
+                          <span>
+                            <b>D-: </b> {segment.elevationLoss.toFixed(2)} m
+                          </span>
+                          <span> &bull; </span>
+                          <span>
+                            <b>Avg Gradient: </b> {segment.avgGrade.toFixed(2)} %
+                          </span>
                         </Header.Subheader>
                       </Header>
                     </Grid.Column>
@@ -63,7 +71,7 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                       </button>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={3}>
+                  <Grid.Row columns={2}>
                     <Grid.Column>
                       <b>Elevations</b>
                       <ul>
@@ -92,20 +100,6 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                         </li>
                         <li>
                           <b>End:</b> {segment.endDistance.toFixed(2)} km
-                        </li>
-                      </ul>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <b>Grades</b>
-                      <ul>
-                        <li>
-                          <b>Min:</b> {segment.minGrade.toFixed(2)} %
-                        </li>
-                        <li>
-                          <b>Avg:</b> {segment.avgGrade.toFixed(2)} %
-                        </li>
-                        <li>
-                          <b>Max:</b> {segment.maxGrade.toFixed(2)} %
                         </li>
                       </ul>
                     </Grid.Column>

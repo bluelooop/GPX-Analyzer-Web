@@ -44,9 +44,17 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                 <Header as="h4">
                   Split {segment.number}
                   <Header.Subheader>
-                    <span>D+: {segment.elevationGain.toFixed(2)} m</span>
-                    <span> -- </span>
-                    <span>D-: {segment.elevationLoss.toFixed(2)} m</span>
+                    <span>
+                      <b>D+: </b> {segment.elevationGain.toFixed(2)} m
+                    </span>
+                    <span> &bull; </span>
+                    <span>
+                      <b>D-: </b> {segment.elevationLoss.toFixed(2)} m
+                    </span>
+                    <span> &bull; </span>
+                    <span>
+                      <b>Avg Grade:</b> {segment.avgGrade.toFixed(2)} %
+                    </span>
                   </Header.Subheader>
                 </Header>
                 <Grid>
@@ -83,22 +91,8 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                       </ul>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={2} verticalAlign="middle">
+                  <Grid.Row verticalAlign="middle" textAlign="center">
                     <Grid.Column>
-                      <b>Grades</b>
-                      <ul>
-                        <li>
-                          <b>Min:</b> {segment.minGrade.toFixed(2)} %
-                        </li>
-                        <li>
-                          <b>Avg:</b> {segment.avgGrade.toFixed(2)} %
-                        </li>
-                        <li>
-                          <b>Max:</b> {segment.maxGrade.toFixed(2)} %
-                        </li>
-                      </ul>
-                    </Grid.Column>
-                    <Grid.Column textAlign="center">
                       <button
                         onClick={() => handleExplainWithAIClick(segment)}
                         className={`ui green button ${generalLoading && 'disabled loading'}`}
