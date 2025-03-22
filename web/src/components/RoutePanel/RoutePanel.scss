@@ -17,18 +17,18 @@
     gap: 1rem;
   }
 
-  .mobile-segment-panel {
+
+  .desktop-segment-panel, .mobile-segment-panel {
+    display: none;
+
     ul {
       padding-left: 10px;
 
       li {
+        padding: 4px;
         list-style: none;
       }
     }
-  }
-
-  .desktop-segment-panel, .mobile-segment-panel {
-    display: none;
   }
 
   @include all-desktop {
