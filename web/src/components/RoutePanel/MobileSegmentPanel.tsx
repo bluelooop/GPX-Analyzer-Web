@@ -15,18 +15,18 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
 
   const handleExplainWithAIClick = useCallback(
     async (segment: GPXSegment) => {
-      setGeneralLoading(true);
+      let description = '';
+      const currentSegmentData = { ...aiGpxSegmentDescriptions };
 
       try {
-        const currentSegmentData = { ...aiGpxSegmentDescriptions };
-
         const aiData = await GpxService.aiExplain(segment);
-
-        currentSegmentData[segment.number] = aiData.description;
-        setAiGpxSegmentDescriptions(currentSegmentData);
+        description = aiData.description;
       } catch (error: Error | unknown) {
-        console.error(error);
+        description = (error as Error).message;
       } finally {
+        currentSegmentData[segment.number] = description;
+        setAiGpxSegmentDescriptions(currentSegmentData);
+
         setGeneralLoading(false);
       }
     },
@@ -104,9 +104,11 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                   </Grid.Row>
                   <Grid.Row verticalAlign="middle">
                     {aiGpxSegmentDescriptions && aiGpxSegmentDescriptions[segment.number] && (
-                      <Segment color="green">
-                        <p>{aiGpxSegmentDescriptions[segment.number]}</p>
-                      </Segment>
+                      <Grid.Column>
+                        <Segment color="green">
+                          <p>{aiGpxSegmentDescriptions[segment.number]}</p>
+                        </Segment>
+                      </Grid.Column>
                     )}
                   </Grid.Row>
                 </Grid>
