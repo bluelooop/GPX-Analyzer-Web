@@ -35,12 +35,12 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
 
   return (
     <Grid stackable>
-      <Header as="h3">Segments</Header>
+      <Header as="h3">Splits</Header>
       <Grid.Row>
         <Grid.Column>
           <Segment.Group>
             {segments.map((segment, index) => (
-              <Segment key={index} color={'blue'}>
+              <Segment key={index} color="blue">
                 <Grid>
                   <Grid.Row columns={2} verticalAlign="middle">
                     <Grid.Column>
@@ -107,7 +107,7 @@ const DesktopSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                   <Grid.Row verticalAlign="middle">
                     <Grid.Column>
                       {aiGpxSegmentDescriptions && aiGpxSegmentDescriptions[segment.number] && (
-                        <Segment color={'green'}>
+                        <Segment color="green">
                           <p>{aiGpxSegmentDescriptions[segment.number]}</p>
                         </Segment>
                       )}

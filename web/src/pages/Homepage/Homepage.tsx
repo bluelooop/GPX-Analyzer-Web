@@ -11,7 +11,7 @@ import FeedbackMessage from '../../components/FeedbackMessage/FeedbackMessage.ts
 import './Homepage.scss';
 
 const Homepage: React.FC = () => {
-  const [routeProvider, setRouteProvider] = useState<RouteProvider>({ name: '' });
+  const [routeProvider, setRouteProvider] = useState<RouteProvider>({} as RouteProvider);
   const [route, setRoute] = useState<GPXRoute | null>();
   const [analyzeFeedbackMessage, setAnalyzeFeedbackMessage] = useState<string>();
 

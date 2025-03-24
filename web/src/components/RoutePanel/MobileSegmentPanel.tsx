@@ -35,7 +35,7 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
 
   return (
     <Grid stackable>
-      <Header as="h3">Segments</Header>
+      <Header as="h3">Splits</Header>
       <Grid.Row>
         <Grid.Column>
           <Segment.Group>
@@ -104,7 +104,7 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
                   </Grid.Row>
                   <Grid.Row verticalAlign="middle">
                     {aiGpxSegmentDescriptions && aiGpxSegmentDescriptions[segment.number] && (
-                      <Segment color={'green'}>
+                      <Segment color="green">
                         <p>{aiGpxSegmentDescriptions[segment.number]}</p>
                       </Segment>
                     )}
