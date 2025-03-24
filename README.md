@@ -37,13 +37,6 @@ To set up the project locally, please use the following steps:
    yarn dev
    ```
 
-## Scripts
-
-The following scripts are available in this project:
-
-- `yarn start` - Starts the development server.
-- `yarn build` - Builds the project for production.
-
 ## Technologies Used
 
 - Node.js
