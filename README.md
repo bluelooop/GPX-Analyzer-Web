@@ -1,4 +1,4 @@
-# Project Name
+# GPX Analyzer Web
 
 **GPX Analyzer** is a frontend project for the python library called with the same name.
 
