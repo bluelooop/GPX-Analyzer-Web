@@ -42,8 +42,10 @@ jobs:
       # Step 5: Build a Docker image
       - name: Build Docker image
         run: |
-          cd api && docker build -t $IMAGE_NAME-api:$IMAGE_TAG .
-          cd web && docker build -t $IMAGE_NAME-web:$IMAGE_TAG .
+          cd api
+          docker build -t $IMAGE_NAME-api:$IMAGE_TAG .
+          cd ../web
+          docker build -t $IMAGE_NAME-web:$IMAGE_TAG .
 
       # Step 6: Push Docker image to GCR
       - name: Push Docker image to GCR
