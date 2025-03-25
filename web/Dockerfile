@@ -29,7 +29,9 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/.env.production.local /usr/share/nginx/html
 
 # Add custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/api.conf /etc/nginx/conf.d/api.conf
+COPY nginx/web.conf /etc/nginx/conf.d/web.conf
 
 # Expose port 80
 EXPOSE 80
