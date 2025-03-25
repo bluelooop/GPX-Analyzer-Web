@@ -12,8 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      #      SERVICE_NAME: gpx-analyzer
-      #      SERVICE_PORT: 80
+      SERVICE_NAME: gpx-analyzer
+      SERVICE_BACKEND_PORT: 3000
+      SERVICE_FRONTEND_PORT: 5173
       IMAGE_NAME: ${{ secrets.GCP_PROJECT_DOCKER_REGISTRY }}/gpx-analyzer
       IMAGE_TAG: ${{ github.sha }}
 
@@ -45,7 +46,7 @@ jobs:
           cd api
           docker build -t $IMAGE_NAME-api:$IMAGE_TAG .
           cd ../web
-          docker build -t $IMAGE_NAME-web:$IMAGE_TAG .
+          docker build -t $IMAGE_NAME-web:$IMAGE_TAG --build-arg API_URL=${{secrets.API_URL}} .
 
       # Step 6: Push Docker image to GCR
       - name: Push Docker image to GCR
@@ -61,20 +62,3 @@ jobs:
           
           docker push $IMAGE_NAME-api:latest
           docker push $IMAGE_NAME-web:latest
-
-      # Step 8. Deploy to Cloud Run
-      #      - name: Deploy to Cloud Run
-      #        run: |
-      #          gcloud run deploy $SERVICE_NAME \
-      #            --image $IMAGE_NAME:$IMAGE_TAG \
-      #            --region ${{ secrets.GCP_REGION }} \
-      #            --platform managed \
-      #            --allow-unauthenticated \
-      #            --port $SERVICE_PORT \
-      #            --memory=1Gi
-
-      # Step 9. Clean up inactive revisions
-#      - name: Clean up inactive revisions
-#        run: |
-#          gcloud run revisions list --service $SERVICE_NAME --region ${{ secrets.GCP_REGION }} --filter "status.conditions.type='Active' AND status.conditions.status='False'" --format "value(metadata.name)" \
-#          | xargs -I {} gcloud run revisions delete {} --region ${{ secrets.GCP_REGION }} --quiet
