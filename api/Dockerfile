@@ -15,7 +15,7 @@ RUN make clone-gpx-analyzer
 
 FROM node:alpine as api
 
-RUN apk add --no-cache git make curl bash build-base libffi-dev openssl-dev bzip2-dev zlib-dev readline-dev sqlite-dev
+RUN apk add --no-cache git make curl bash build-base libffi-dev openssl-dev bzip2-dev zlib-dev readline-dev sqlite-dev xz-dev
 
 RUN echo "Installing pyenv..."
 RUN curl https://pyenv.run | bash
