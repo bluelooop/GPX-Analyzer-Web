@@ -32,6 +32,7 @@ COPY --from=builder /app/.env.production.local /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/api.conf /etc/nginx/conf.d/api.conf
 COPY nginx/web.conf /etc/nginx/conf.d/web.conf
+RUN rm -f /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
