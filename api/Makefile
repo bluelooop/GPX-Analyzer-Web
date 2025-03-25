@@ -46,12 +46,13 @@ configure-gpx-analyzer: create-gpx-analyzer-python-venv install-gpx-analyzer-lib
 	@echo "GPX Analyzer configured successfully"
 
 # create-env-file:
-# Creates or overwrites the .env file for the production environment.
+# Creates or overwrites the .env file for the environment.
 # It adds required environment variables such as `PYTHON_PATH`, paths to the GPX
 # Analyzer script, and Strava integration information (client ID, secret, and redirect URI).
 #
 # Note:
 #   Ensure the following environment variables are set:
+#	- ENV_FILE
 #   - GPX_ANALYZER_LIB_PATH
 #   - STRAVA_CLIENT_ID
 #   - STRAVA_CLIENT_SECRET
@@ -71,4 +72,4 @@ create-env-file:
 	@echo "# AI Value" >> $(ENV_FILE)
 	@echo "ANTHROPIC_MODEL=claude-3-5-haiku-20241022" >> $(ENV_FILE)
 
-	@echo "Production ENV file created"
+	@echo "ENV file created"
