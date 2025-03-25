@@ -43,6 +43,8 @@ authRouter.get(
         code as string,
       );
 
+      console.log(accessToken);
+
       if (!accessToken.success) {
         return res.redirect(`${redirectURL.toString()}?auth=false`);
       }
