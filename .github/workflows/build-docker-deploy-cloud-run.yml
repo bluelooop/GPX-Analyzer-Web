@@ -1,0 +1,78 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Build and Push Docker Image to GCP
+    runs-on: ubuntu-latest
+
+    env:
+      #      SERVICE_NAME: gpx-analyzer
+      #      SERVICE_PORT: 80
+      IMAGE_NAME: ${{ secrets.GCP_PROJECT_DOCKER_REGISTRY }}/gpx-analyzer
+      IMAGE_TAG: ${{ github.sha }}
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Checkout the code
+      - name: GCP Authentication
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      # Step 3: Set up Google Cloud SDK
+      - name: Set up GCloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          version: '>= 363.0.0'
+
+      # Step 4: Configure Docker to use GCP credentials
+      - name: Authenticate Docker to GCR
+        run: gcloud auth configure-docker ${{ secrets.GCP_DOCKER_REGISTRY }}
+
+      # Step 5: Build a Docker image
+      - name: Build Docker image
+        run: |
+          cd api && docker build -t $IMAGE_NAME-api:$IMAGE_TAG .
+          cd web && docker build -t $IMAGE_NAME-web:$IMAGE_TAG .
+
+      # Step 6: Push Docker image to GCR
+      - name: Push Docker image to GCR
+        run: |
+          docker push $IMAGE_NAME-api:$IMAGE_TAG
+          docker push $IMAGE_NAME-web:$IMAGE_TAG
+
+      # Step 7: (Optional) Tag as latest
+      - name: Add "latest" tag to the image
+        run: |
+          docker tag $IMAGE_NAME-api:$IMAGE_TAG $IMAGE_NAME-api:latest
+          docker tag $IMAGE_NAME-web:$IMAGE_TAG $IMAGE_NAME-web:latest
+          
+          docker push $IMAGE_NAME-api:latest
+          docker push $IMAGE_NAME-web:latest
+
+      # Step 8. Deploy to Cloud Run
+      #      - name: Deploy to Cloud Run
+      #        run: |
+      #          gcloud run deploy $SERVICE_NAME \
+      #            --image $IMAGE_NAME:$IMAGE_TAG \
+      #            --region ${{ secrets.GCP_REGION }} \
+      #            --platform managed \
+      #            --allow-unauthenticated \
+      #            --port $SERVICE_PORT \
+      #            --memory=1Gi
+
+      # Step 9. Clean up inactive revisions
+#      - name: Clean up inactive revisions
+#        run: |
+#          gcloud run revisions list --service $SERVICE_NAME --region ${{ secrets.GCP_REGION }} --filter "status.conditions.type='Active' AND status.conditions.status='False'" --format "value(metadata.name)" \
+#          | xargs -I {} gcloud run revisions delete {} --region ${{ secrets.GCP_REGION }} --quiet
