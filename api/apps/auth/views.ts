@@ -50,7 +50,6 @@ authRouter.get(
       res.cookie('_rpat', accessToken.tokens.accessToken, {
         httpOnly: true,
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
-        secure: redirectURL.protocol === 'https:',
       });
 
       return res.redirect(`${redirectURL.toString()}?auth=${accessToken.tokens.expiresIn}`);
