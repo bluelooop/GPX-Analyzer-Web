@@ -50,8 +50,8 @@ authRouter.get(
 
       res.cookie('__Secure-session', accessToken.tokens.accessToken, {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
-        domain: redirectURL.hostname,
         path: '/',
+        domain: '.run.app',
         httpOnly: true,
         secure: redirectURL.protocol === 'https:',
         sameSite: 'none',
@@ -60,7 +60,7 @@ authRouter.get(
       res.cookie('__Secure-authed', '/', {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         path: '/',
-        domain: redirectURL.hostname,
+        domain: '.run.app',
         httpOnly: false,
         secure: redirectURL.protocol === 'https:',
         sameSite: 'none',
