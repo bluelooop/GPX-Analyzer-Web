@@ -9,7 +9,7 @@ const gpxRouter = Router();
 gpxRouter.post('/analyze', (req, res) => {
   const { url } = req.body;
   const segmentCount = parseInt(req.query.segments as string, 10);
-  const routeProviderToken: string = req.cookies.__session;
+  const routeProviderToken: string = req.cookies['__Secure-session'];
 
   if (!routeProviderToken) {
     return res.status(400).json({ message: 'Route provider token not set' });

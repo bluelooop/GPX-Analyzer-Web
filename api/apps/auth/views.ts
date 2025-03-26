@@ -26,7 +26,7 @@ authRouter.post('/route-provider', (req: Request, res: Response) => {
 
 authRouter.get(
   '/route-provider/:provider/access-token',
-  async (req: Request, res: Response): Promise<Response | any> => {
+  async (req: Request, res: Response): Promise<void> => {
     const { provider } = req.params;
     const { code } = req.query;
     const redirectURL = new URL(
@@ -34,7 +34,8 @@ authRouter.get(
     );
 
     if (!code) {
-      return res.redirect(`${redirectURL.toString()}?auth=false`);
+      res.redirect(302, `${redirectURL.toString()}?auth=false`);
+      return;
     }
 
     try {
@@ -44,10 +45,10 @@ authRouter.get(
       );
 
       if (!accessToken.success) {
-        return res.redirect(301, `${redirectURL.toString()}?auth=false`);
+        return res.redirect(302, `${redirectURL.toString()}?auth=false`);
       }
 
-      res.cookie('__session', accessToken.tokens.accessToken, {
+      res.cookie('__Secure-session', accessToken.tokens.accessToken, {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         domain: redirectURL.hostname,
         httpOnly: true,
@@ -55,12 +56,17 @@ authRouter.get(
         sameSite: 'none',
       });
 
-      return res.redirect(
-        301,
-        `${redirectURL.toString()}?auth=true&expires=${accessToken.tokens.expiresIn}`,
-      );
+      res.cookie('__Secure-rpa', '/', {
+        expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
+        domain: redirectURL.hostname,
+        httpOnly: false,
+        secure: redirectURL.protocol === 'https:',
+        sameSite: 'none',
+      });
+
+      res.status(302).location(`${redirectURL.toString()}?auth=true`).send();
     } catch {
-      return res.redirect(301, `${redirectURL.toString()}?auth=false`);
+      res.redirect(302, `${redirectURL.toString()}?auth=false`);
     }
   },
 );
