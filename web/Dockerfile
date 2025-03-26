@@ -19,25 +19,18 @@ RUN yarn install
 COPY . .
 
 RUN make create-env-file
+RUN make configure-nginx
 
 # Build the app
 RUN yarn build
 
 FROM nginx:alpine
 
-ARG API_URL
-
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/.env.production.local /usr/share/nginx/html
 
-RUN apk add --no-cache make
-
-COPY Makefile ./
-
 # Add custom nginx configuration
-COPY nginx/web.conf /etc/nginx/conf.d/default.conf
-
-RUN make configure-nginx
+COPY --from=builder /app/nginx/web.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80

@@ -18,8 +18,5 @@ create-env-file:
 
 API_HOST := $(shell echo "$(API_URL)" | sed 's|https\?://||g' | sed 's|:[0-9]*||g')
 configure-nginx:
-	@echo "$(API_URL)" >> /etc/nginx/conf.d/api.url
-	@echo "$(API_HOST)" >> /etc/nginx/conf.d/api.host
-
-	@sed -i "s|%%API_URL%%|$(API_URL)|g" /etc/nginx/conf.d/default.conf
-	@sed -i "s|%%API_HOST%%|$(API_HOST)|g" /etc/nginx/conf.d/default.conf
+	@sed -i "s|%%API_URL%%|$(API_URL)|g" nginx/web.conf
+	@sed -i "s|%%API_HOST%%|$(API_HOST)|g" nginx/web.conf
