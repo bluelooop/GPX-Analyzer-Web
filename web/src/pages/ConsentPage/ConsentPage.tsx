@@ -14,7 +14,7 @@ const ConsentPage: React.FC = () => {
       const expiresNumber = parseInt(expires, 10);
       if (expiresNumber) {
         setCookie('_rpa', '1', expiresNumber);
-        setCookie('_rpat', code, expiresNumber, true);
+        setCookie('_rpat', code, expiresNumber, true, location.protocol === 'https:');
         window.close();
       }
       setConsentError(
