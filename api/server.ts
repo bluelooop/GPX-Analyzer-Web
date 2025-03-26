@@ -21,7 +21,6 @@ server.use(cors(corsOptions));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
-server.set('trust proxy', true);
 
 // Specify all routes
 server.use('/api', apiRouter);
