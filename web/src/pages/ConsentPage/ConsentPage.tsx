@@ -7,15 +7,13 @@ const ConsentPage: React.FC = () => {
   const [consentError, setConsentError] = useState<string>('');
 
   useEffect(() => {
+    debugger;
     const authenticated = searchParams['auth'];
-    if (authenticated && authenticated === 'true') {
-      const code = searchParams['code'];
+    if (authenticated && Boolean(authenticated)) {
       const expires = searchParams['expires'];
       const expiresNumber = parseInt(expires, 10);
-      debugger;
-      if (code && expiresNumber) {
+      if (expiresNumber) {
         setCookie('_rpa', '1', expiresNumber);
-        setCookie('_rpat', code, expiresNumber);
         window.close();
       }
     }

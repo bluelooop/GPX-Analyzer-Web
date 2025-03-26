@@ -41,38 +41,18 @@ export const isValidURL = (url: string): boolean => {
  * @param name - The name of the cookie.
  * @param value - The value of the cookie.
  * @param expirySeconds - The time in seconds until the cookie expires.
- * @param httpOnly - A flag indicating whether the cookie should be marked as HttpOnly, protecting it from client-side scripts.
- * @param secure - A flag indicating whether the cookie should be marked as secure
  *
  *
  * @example
  * // Set a cookie named "user" with value "JohnDoe" that lasts for 1 day
  * setCookie('user', 'JohnDoe', 86400);
  *
- * @example
- * // Set a secure HttpOnly cookie named "session" with value "abcdef123456"
- * setCookie('session', 'abcdef123456', 3600, true);
  */
-export const setCookie = (
-  name: string,
-  value: string,
-  expirySeconds: number,
-  httpOnly: boolean = false,
-  secure: boolean = false,
-) => {
+export const setCookie = (name: string, value: string, expirySeconds: number) => {
   const date = new Date();
   date.setTime(date.getTime() + expirySeconds * 1000);
-  let cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
 
-  if (httpOnly) {
-    cookie = cookie.concat(`; HttpOnly`);
-  }
-
-  if (secure) {
-    cookie = cookie.concat(`; Secure`);
-  }
-
-  document.cookie = cookie;
+  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
 };
 
 /**
