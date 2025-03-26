@@ -48,7 +48,7 @@ authRouter.get(
         return res.redirect(302, `${redirectURL.toString()}?auth=false`);
       }
 
-      res.cookie('__Secure-session', accessToken.tokens.accessToken, {
+      res.cookie('__session', accessToken.tokens.accessToken, {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         domain: redirectURL.hostname,
         httpOnly: true,
@@ -56,7 +56,7 @@ authRouter.get(
         sameSite: 'none',
       });
 
-      res.cookie('__Secure-rpa', '/', {
+      res.cookie('__auth', '/', {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         domain: redirectURL.hostname,
         httpOnly: false,
