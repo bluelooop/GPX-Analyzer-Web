@@ -19,7 +19,6 @@ RUN yarn install
 COPY . .
 
 RUN make create-env-file
-RUN make configure-nginx
 
 # Build the app
 RUN yarn build
