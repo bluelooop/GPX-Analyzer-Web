@@ -44,21 +44,28 @@ authRouter.get(
       );
 
       if (!accessToken.success) {
-        return res.redirect(`${redirectURL.toString()}?auth=false`);
+        return res.redirect(301, `${redirectURL.toString()}?auth=false`);
       }
 
-      res.cookie('_rpat', accessToken.tokens.accessToken, {
+      res.cookie('__session', accessToken.tokens.accessToken, {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         domain: redirectURL.hostname,
         httpOnly: true,
         secure: redirectURL.protocol === 'https:',
+        sameSite: 'none',
+      });
+
+      res.set({
+        'Cache-Control': 'private',
+        Expires: accessToken.tokens.expiresAt,
       });
 
       return res.redirect(
+        301,
         `${redirectURL.toString()}?auth=true&expires=${accessToken.tokens.expiresIn}`,
       );
     } catch {
-      return res.redirect(`${redirectURL.toString()}?auth=false`);
+      return res.redirect(301, `${redirectURL.toString()}?auth=false`);
     }
   },
 );
