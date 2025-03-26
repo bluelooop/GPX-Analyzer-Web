@@ -47,14 +47,9 @@ authRouter.get(
         return res.redirect(`${redirectURL.toString()}?auth=false`);
       }
 
-      res.cookie('_rpat', accessToken.tokens.accessToken, {
-        httpOnly: true,
-        expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
-        // secure: redirectURL.protocol === 'https:',
-        domain: redirectURL.hostname,
-      });
-
-      return res.redirect(`${redirectURL.toString()}?auth=${accessToken.tokens.expiresIn}`);
+      return res.redirect(
+        `${redirectURL.toString()}?auth=true&code=${accessToken.tokens.accessToken}&expires=${accessToken.tokens.expiresIn}`,
+      );
     } catch {
       return res.redirect(`${redirectURL.toString()}?auth=false`);
     }

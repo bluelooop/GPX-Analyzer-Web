@@ -61,11 +61,13 @@ export const setCookie = (
 ) => {
   const date = new Date();
   date.setTime(date.getTime() + expirySeconds * 1000);
+  let cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+
   if (httpOnly) {
-    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; HttpOnly; Secure`;
-  } else {
-    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+    cookie = cookie.concat(`; HttpOnly`);
   }
+
+  document.cookie = cookie;
 };
 
 /**
