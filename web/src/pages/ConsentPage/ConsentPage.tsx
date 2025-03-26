@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useQueryParams } from '../../hooks.ts';
-import { setCookie } from '../../utils.ts';
 
 const ConsentPage: React.FC = () => {
   const searchParams = useQueryParams();
@@ -9,13 +8,8 @@ const ConsentPage: React.FC = () => {
   useEffect(() => {
     debugger;
     const authenticated = searchParams['auth'];
-    if (authenticated && Boolean(authenticated)) {
-      const expires = searchParams['expires'];
-      const expiresNumber = parseInt(expires, 10);
-      if (expiresNumber) {
-        setCookie('_rpa', '1', expiresNumber);
-        window.close();
-      }
+    if (authenticated && authenticated === 'true') {
+      window.close();
     }
 
     setConsentError(
