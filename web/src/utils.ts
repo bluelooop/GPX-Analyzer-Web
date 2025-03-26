@@ -36,26 +36,6 @@ export const isValidURL = (url: string): boolean => {
 };
 
 /**
- * Sets a cookie with a specified name, value, expiration time, and optional HttpOnly flag.
- *
- * @param name - The name of the cookie.
- * @param value - The value of the cookie.
- * @param expirySeconds - The time in seconds until the cookie expires.
- *
- *
- * @example
- * // Set a cookie named "user" with value "JohnDoe" that lasts for 1 day
- * setCookie('user', 'JohnDoe', 86400);
- *
- */
-export const setCookie = (name: string, value: string, expirySeconds: number) => {
-  const date = new Date();
-  date.setTime(date.getTime() + expirySeconds * 1000);
-
-  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
-};
-
-/**
  * Retrieves the value of a specified cookie by its name.
  *
  * @param name - The name of the cookie to retrieve.
