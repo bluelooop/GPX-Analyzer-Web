@@ -61,6 +61,19 @@ authRouter.get(
         code as string,
       );
 
+      // const accessToken = {
+      //   success: true,
+      //   message: 'Authorization successful',
+      //   provider: 'strava',
+      //   tokens: {
+      //     accessToken: '1234567890',
+      //     type: 'Bearer',
+      //     expiresAt: new Date().getTime() + 3600 * 10000,
+      //     expiresIn: new Date().getTime() + 3600 * 10000,
+      //     refreshToken: '1234567890',
+      //   },
+      // };
+
       if (!accessToken.success) {
         return res.redirect(302, `${redirectURL.toString()}?auth=false`);
       }
@@ -76,7 +89,7 @@ authRouter.get(
         domain,
         path: '/',
         secure: redirectURL.protocol === 'https:', // Required for __Secure- prefix
-        sameSite: 'strict' as const, // Use strict when behind Google Frontend
+        sameSite: 'none' as const, // Use strict when behind Google Frontend
         httpOnly: true,
       };
 
