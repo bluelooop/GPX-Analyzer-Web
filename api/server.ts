@@ -12,7 +12,13 @@ const corsOptions = {
   origin: process.env.FRONTEND_URL,
   credentials: true, // Allow cookies and credentials
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Forwarded-For',
+    'X-Forwarded-Proto',
+    'X-Forwarded-Host',
+  ], // Allowed headers
   optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
 };
 
@@ -21,6 +27,13 @@ server.use(cors(corsOptions));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
+server.set('trust proxy', true);
+
+// Middleware to ensure secure cookie settings
+server.use((req, res, next) => {
+  res.set('X-Forwarded-Proto', 'https');
+  next();
+});
 
 // Specify all routes
 server.use('/api', apiRouter);
