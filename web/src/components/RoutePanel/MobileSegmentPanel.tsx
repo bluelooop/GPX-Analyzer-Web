@@ -15,6 +15,7 @@ const MobileSegmentPanel: React.FC<SegmentsPanelProps> = ({ segments }) => {
 
   const handleExplainWithAIClick = useCallback(
     async (segment: GPXSegment) => {
+      setGeneralLoading(true);
       let description = '';
       const currentSegmentData = { ...aiGpxSegmentDescriptions };
 
