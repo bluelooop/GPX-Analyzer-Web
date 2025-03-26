@@ -48,21 +48,25 @@ authRouter.get(
         return res.redirect(302, `${redirectURL.toString()}?auth=false`);
       }
 
-      res.cookie('__session', accessToken.tokens.accessToken, {
+      res.cookie('__Secure-session', accessToken.tokens.accessToken, {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         domain: redirectURL.hostname,
+        path: '/',
         httpOnly: true,
         secure: redirectURL.protocol === 'https:',
         sameSite: 'none',
       });
 
-      res.cookie('__auth', '/', {
+      res.cookie('__Secure-authed', '/', {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
+        path: '/',
         domain: redirectURL.hostname,
         httpOnly: false,
         secure: redirectURL.protocol === 'https:',
         sameSite: 'none',
       });
+
+      console.log(res.getHeaders());
 
       res.status(302).location(`${redirectURL.toString()}?auth=true`).send();
     } catch {
