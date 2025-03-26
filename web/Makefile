@@ -20,6 +20,3 @@ API_HOST := $(shell echo "$(API_URL)" | sed 's|https\?://||g' | sed 's|:[0-9]*||
 configure-nginx:
 	@sed -i "s|%%API_URL%%|$(API_URL)|g" nginx/web.conf
 	@sed -i "s|%%API_HOST%%|$(API_HOST)|g" nginx/web.conf
-	@echo "Nginx configuration changed:"
-	@echo "API_URL: $(API_URL)"
-	@echo "API_HOST: $(API_HOST)"
