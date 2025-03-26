@@ -51,6 +51,7 @@ authRouter.get(
         httpOnly: true,
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
         secure: redirectURL.protocol === 'https:',
+        domain: `.${redirectURL.hostname}`,
       });
 
       return res.redirect(`${redirectURL.toString()}?auth=${accessToken.tokens.expiresIn}`);
