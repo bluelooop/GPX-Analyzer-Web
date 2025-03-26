@@ -28,10 +28,10 @@ const Homepage: React.FC = () => {
 
   const onAnalyzeRouteClick = useCallback(
     async (routeURL: URL, splitBy: number) => {
-      let routeProviderAuthenticated = getCookie('__Secure-rpa');
+      let routeProviderAuthenticated = getCookie('__auth');
 
       const handleRouteProviderAuthenticated = async () => {
-        routeProviderAuthenticated = getCookie('__Secure-rpa');
+        routeProviderAuthenticated = getCookie('__auth');
         if (routeProviderAuthenticated) {
           window.removeEventListener('focus', handleRouteProviderAuthenticated);
 
