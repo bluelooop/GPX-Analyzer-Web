@@ -55,11 +55,6 @@ authRouter.get(
         sameSite: 'none',
       });
 
-      res.set({
-        'Cache-Control': 'private',
-        Expires: accessToken.tokens.expiresAt,
-      });
-
       return res.redirect(
         301,
         `${redirectURL.toString()}?auth=true&expires=${accessToken.tokens.expiresIn}`,
