@@ -12,10 +12,10 @@ const ConsentPage: React.FC = () => {
       const code = searchParams['code'];
       const expires = searchParams['expires'];
       const expiresNumber = parseInt(expires, 10);
-      console.log(code, expiresNumber);
+      debugger;
       if (code && expiresNumber) {
         setCookie('_rpa', '1', expiresNumber);
-        setCookie('_rpat', code, expiresNumber, true, location.protocol === 'https:');
+        setCookie('_rpat', code, expiresNumber);
         window.close();
       }
     }
