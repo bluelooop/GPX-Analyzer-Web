@@ -14,3 +14,6 @@ create-env-file:
 
 	@echo "VITE_API_URL=$(API_URL)" >> $(ENV_FILE)
 	@echo "ENV file created"
+
+configure-nginx:
+	@sed -i "s|%%API_URL%%|$(API_URL)|g" nginx/$(NGINX_CONF)
