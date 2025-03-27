@@ -55,7 +55,7 @@ authRouter.get(
         secure: redirectURL.protocol === 'https:',
       };
 
-      res.cookie('__rp-session', accessToken.tokens.accessToken, cookieOptions);
+      res.cookie('__rp_session', accessToken.tokens.accessToken, cookieOptions);
       res.cookie('__rpa', '1', { ...cookieOptions, httpOnly: false });
 
       res.status(302).location(`${redirectURL.toString()}?auth=true`).send();
