@@ -44,19 +44,6 @@ authRouter.get(
         code as string,
       );
 
-      // const accessToken = {
-      //   success: true,
-      //   message: 'Authorization successful',
-      //   provider: 'strava',
-      //   tokens: {
-      //     accessToken: '1234567890',
-      //     type: 'Bearer',
-      //     expiresAt: new Date().getTime() + 3600 * 10000,
-      //     expiresIn: new Date().getTime() + 3600 * 10000,
-      //     refreshToken: '1234567890',
-      //   },
-      // };
-
       if (!accessToken.success) {
         return res.redirect(302, `${redirectURL.toString()}?auth=false`);
       }
@@ -64,16 +51,12 @@ authRouter.get(
       // Common cookie options
       const cookieOptions = {
         expires: new Date(Date.now() + accessToken.tokens.expiresIn * 1000),
-        path: '/',
         httpOnly: true,
         secure: redirectURL.protocol === 'https:',
       };
 
-      res.cookie('__Secure-session', accessToken.tokens.accessToken, cookieOptions);
-
-      res.cookie('__Secure-authed', '/', { ...cookieOptions, httpOnly: false });
-
-      console.log(res.getHeaders());
+      res.cookie('__rp-session', accessToken.tokens.accessToken, cookieOptions);
+      res.cookie('__rpa', '1', { ...cookieOptions, httpOnly: false });
 
       res.status(302).location(`${redirectURL.toString()}?auth=true`).send();
     } catch {
