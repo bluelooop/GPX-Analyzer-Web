@@ -89,7 +89,7 @@ authRouter.get(
         domain,
         path: '/',
         secure: redirectURL.protocol === 'https:', // Required for __Secure- prefix
-        sameSite: 'strict' as const, // Use strict when behind Google Frontend
+        sameSite: 'none' as const, // Use strict when behind Google Frontend
         httpOnly: true,
       };
 
