@@ -81,7 +81,7 @@ authRouter.get(
       // Get the actual host from X-Forwarded-Host header
       const forwardedHost = req.get('X-Forwarded-Host');
       // Extract domain from forwarded host or fall back to request host
-      const domain = forwardedHost || req.get('host');
+      const domain = redirectURL.hostname || forwardedHost || req.hostname;
 
       // Common cookie options
       const cookieOptions = {
@@ -89,7 +89,7 @@ authRouter.get(
         domain,
         path: '/',
         secure: redirectURL.protocol === 'https:', // Required for __Secure- prefix
-        sameSite: 'none' as const, // Use strict when behind Google Frontend
+        sameSite: 'strict' as const, // Use strict when behind Google Frontend
         httpOnly: true,
       };
 
