@@ -30,7 +30,7 @@ authRouter.get(
     const { provider } = req.params;
     const { code } = req.query;
     const redirectURL = new URL(
-      `${process.env.FRONTEND_URL}/${process.env.FRONTEND_CONSENT_REDIRECT_PAGE}`,
+      `${process.env.FRONTEND_CONSENT_REDIRECT_HOST}/${process.env.FRONTEND_CONSENT_REDIRECT_PAGE}`,
     );
 
     if (!code) {

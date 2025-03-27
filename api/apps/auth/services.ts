@@ -4,7 +4,7 @@ import axios from 'axios';
 export const CONSENT_URLS: Record<string, CallableFunction> = {
   strava: (): string => {
     const clientID = process.env.STRAVA_CLIENT_ID;
-    const redirectURI = `${process.env.STRAVA_REDIRECT_DOMAIN}/${process.env.STRAVA_REDIRECT_PATH}`;
+    const redirectURI = `${process.env.STRAVA_REDIRECT_HOST}/${process.env.STRAVA_REDIRECT_PATH}`;
 
     if (!clientID || !redirectURI) {
       throw new Error('Strava client ID or redirect URI not set');

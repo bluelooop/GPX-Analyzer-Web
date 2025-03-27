@@ -50,8 +50,10 @@ declare global {
       GPX_ANALYZER_SCRIPT_PATH: string;
       STRAVA_CLIENT_ID: string;
       STRAVA_CLIENT_SECRET: string;
-      STRAVA_REDIRECT_DOMAIN: string;
-      FRONTEND_URL: string;
+      STRAVA_REDIRECT_HOST: string;
+      STRAVA_REDIRECT_PATH: string;
+      FRONTEND_URLS: string;
+      FRONTEND_CONSENT_REDIRECT_HOST: string;
       FRONTEND_CONSENT_REDIRECT_PAGE: string;
       ANTHROPIC_MODEL: string;
       // Add other env variables here
