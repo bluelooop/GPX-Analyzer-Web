@@ -6,7 +6,6 @@ const ConsentPage: React.FC = () => {
   const [consentError, setConsentError] = useState<string>('');
 
   useEffect(() => {
-    debugger;
     const authenticated = searchParams['auth'];
     if (authenticated && authenticated === 'true') {
       window.close();
